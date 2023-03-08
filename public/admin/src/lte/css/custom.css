@@ -1,0 +1,135 @@
+.btn-space {
+    margin-right: 2px;
+}
+
+.nopadding-left {
+    padding-left: 0 !important;
+}
+
+.nopadding-right {
+    padding-right: 0 !important;
+}
+
+.noradius-left{
+	border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.noradius-right{
+	border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}    
+
+.btn-space {
+    margin-right: 2px;
+}
+
+/* product form */
+.product-img img {
+	width:100%;
+	margin-bottom: 5px;
+}      
+.product-img [class^="col-"],
+.product-img [class*=" col-"] {
+	margin-bottom: 15px;
+} 
+
+.bold-option-select{
+    font-weight: bolder;
+}
+
+/* datatable custom filter */
+.datatable-custom-filter {
+    margin-bottom: 20px;
+}
+#pageLen {
+    width: 64px;
+    display: inline-block !important;
+}
+
+.pace .pace-progress {
+    background: #FF6C4B;
+}
+.pace .pace-progress-inner {
+    box-shadow: 0 0 10px #FF6C4B, 0 0 5px #FF6C4B;
+}
+.pace .pace-activity {
+    border-top-color: #FF6C4B;
+    border-left-color: #FF6C4B;
+}
+
+.pagination>.active>a,
+.pagination>.active>a:focus,
+.pagination>.active>a:hover,
+.pagination>.active>span,
+.pagination>.active>span:focus,
+.pagination>.active>span:hover {
+    background-color:#31B7F7;
+    border-color:#31B7F7
+}
+
+/* font */
+@font-face {
+    font-family: 'Gotham Black';
+    src: url('../fonts/Gotham-Black.otf');
+}
+@font-face {
+    font-family: 'Gotham BlackItalic';
+    src: url('../fonts/Gotham-BlackItalic.otf');
+}
+@font-face {
+    font-family: 'Gotham Bold';
+    src: url('../fonts/Gotham-Bold.otf');
+}
+@font-face {
+    font-family: 'Gotham BoldItalic';
+    src: url('../fonts/Gotham-BoldItalic.otf');
+}
+@font-face {
+    font-family: 'Gotham Book';
+    src: url('../fonts/Gotham-Book.otf');
+}
+@font-face {
+    font-family: 'Gotham BookItalic';
+    src: url('../fonts/Gotham-BookItalic.otf');
+}
+@font-face {
+    font-family: 'Gotham Light';
+    src: url('../fonts/Gotham-Light.otf');
+}
+@font-face {
+    font-family: 'Gotham LightItalic';
+    src: url('../fonts/Gotham-LightItalic.otf');
+}
+@font-face {
+    font-family: 'Gotham Medium';
+    src: url('../fonts/Gotham-Medium.otf');
+}
+@font-face {
+    font-family: 'Gotham MediumItalic';
+    src: url('../fonts/Gotham-MediumItalic.otf');
+}
+@font-face {
+    font-family: 'Gotham Thin';
+    src: url('../fonts/Gotham-Thin.otf');
+}
+@font-face {
+    font-family: 'Gotham ThinItalic';
+    src: url('../fonts/Gotham-ThinItalic.otf');
+}
+@font-face {
+    font-family: 'Gotham Ultra';
+    src: url('../fonts/Gotham-Ultra.otf');
+}
+@font-face {
+    font-family: 'Gotham UltraItalic';
+    src: url('../fonts/Gotham-UltraItalic.otf');
+}
+@font-face {
+    font-family: 'Gotham XLight';
+    src: url('../fonts/Gotham-XLight.otf');
+}
+@font-face {
+    font-family: 'Gotham XLightItalic';
+    src: url('../fonts/Gotham-XLightItalic.otf');
+}

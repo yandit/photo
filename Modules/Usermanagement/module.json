@@ -1,0 +1,20 @@
+{
+    "name": "UserManagement",
+    "alias": "usermanagement",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\UserManagement\\Providers\\UserManagementServiceProvider",
+        "Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider"
+    ],
+    "aliases": {
+        "Activation" : "Cartalyst\\Sentinel\\Laravel\\Facades\\Activation",
+        "Reminder"   : "Cartalyst\\Sentinel\\Laravel\\Facades\\Reminder",
+        "Sentinel"   : "Cartalyst\\Sentinel\\Laravel\\Facades\\Sentinel"
+    },
+    "files": [
+        "Helper/helper.php"
+    ],
+    "requires": []
+}
