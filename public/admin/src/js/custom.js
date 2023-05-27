@@ -10,26 +10,6 @@ $(document).ready(function(){
         });        
     }, 2000);
 
-	$('body').on('click', '.deleteDialog', function(event){
-        event.preventDefault();
-        var title = $(this).data('title');
-        var redirect = $(this).attr('href');
-        var message = 'Delete ' + '"' + title + '" ?';
-        if($(this).data('message')){
-            message = $(this).data('message');
-        }
-        
-        $('#form-confirm-delete').attr('action', redirect);
-
-        var modalRemove = $('#modalRemove');
-        modalRemove.modal();
-        modalRemove.find('.modal-body h5').text(message);
-        // modalRemove.find('#confirm-delete').click(function(e){
-        //     // e.preventDefault();
-        //     // window.location.href = redirect;
-        // });
-    });
-
     $('.input-price').each(function(index, elem) {
         var value = $(this).val();        
         $(this).val(thousandFunction(value));
@@ -235,3 +215,62 @@ window.thousandFormat = function(e) {
     var format =  $(e).val().toString().replace(/\./g,'').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     $(e).val(format);
 };
+
+window.handleDeleteDialog = function(datatable=null){
+    $(document).on('click' ,'.deleteDialog', function(e){
+        e.preventDefault()
+        var title = $(this).data('title');
+        var redirect = $(this).attr('href');
+        var message = 'Delete ' + '"' + title + '" ?';
+        if($(this).data('message')){
+            message = $(this).data('message');
+        }
+
+        Swal.fire({
+            title: title,
+            text: message,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteItem(redirect, datatable);
+            }
+        })
+    })
+}
+
+function deleteItem(redirect, datatable) {
+    $.ajax({
+        url: redirect,
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: 'POST',
+        data: {
+            _method: 'DELETE'
+        },
+        success: function(response) {
+            Swal.fire({
+                title: 'Deleted!',
+                text: 'The item has been deleted.',
+                icon: 'success'
+            }).then(() => {
+                if(datatable){
+                    datatable.draw()
+                }else{
+                    window.location.reload()
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'An error occurred while deleting the item.',
+                icon: 'error'
+            });
+        }
+    });
+}

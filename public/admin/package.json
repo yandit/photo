@@ -41,6 +41,8 @@
     "select2": "^4.0.13",
     "spectrum-colorpicker": "^1.8.0",
     "summernote": "^0.8.12",
+    "sweetalert2": "^11.7.5",
+    "toastr": "^2.1.4",
     "xlsx": "^0.15.5"
   }
 }

@@ -156,6 +156,7 @@
     $(document).ready(function(){
       $('#formSetting').parsley(parsleyOptions);
       $('.summernote').summernote(summernoteOptions);
+      handleDeleteDialog()
     });
   </script>
 @endsection

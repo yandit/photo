@@ -42,10 +42,6 @@
 .datatable-custom-filter {
     margin-bottom: 20px;
 }
-#pageLen {
-    width: 64px;
-    display: inline-block !important;
-}
 
 .pace .pace-progress {
     background: #FF6C4B;
@@ -58,15 +54,10 @@
     border-left-color: #FF6C4B;
 }
 
-.pagination>.active>a,
-.pagination>.active>a:focus,
-.pagination>.active>a:hover,
-.pagination>.active>span,
-.pagination>.active>span:focus,
-.pagination>.active>span:hover {
-    background-color:#31B7F7;
-    border-color:#31B7F7
+.swal2-container {
+    zoom: 1.5;
 }
+
 
 /* font */
 @font-face {

@@ -23,6 +23,8 @@ module.exports = {
 				'node_modules/select2/dist/css/select2.min.css',
 				'node_modules/bootstrap-toggle/css/bootstrap-toggle.min.css',
 				'node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
+				'node_modules/toastr/build/toastr.min.css',
+				'node_modules/sweetalert2/dist/sweetalert2.min.css',
 				//'node_modules/spectrum-colorpicker/spectrum.css',
 			],
 			app: [
@@ -63,6 +65,8 @@ module.exports = {
 				'node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
 				'node_modules/xlsx/dist/xlsx.full.min.js',
 				'node_modules/file-saver/dist/FileSaver.min.js',
+				'node_modules/toastr/build/toastr.min.js',
+				'node_modules/sweetalert2/dist/sweetalert2.min.js',
 				
 				/* "node_modules/jquery-ui",
 				"node_modules/jquery-ui/ui/widgets/sortable.js",
