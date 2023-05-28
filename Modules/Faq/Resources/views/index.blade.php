@@ -108,6 +108,10 @@
     <script>
       $(document).ready(function(){		  	
         var settings = {
+          responsive: true,
+          columnDefs: [
+            {responsivePriority: 1, targets: -1}
+          ],
           destroy: true,
           scrollCollapse: true,
           autoWidth: false,
@@ -118,10 +122,10 @@
           order: [[ 0, "asc" ]],
           searching: false,
           columns: [
-            { data:'no', width: '80px', render:function(data, type, row, meta){
+            { data:null, width: '80px', render:function(data, type, row, meta){
               var json = meta.settings.json;
               return (json.old_start + meta.row + 1);
-            }},            
+            }},
             { data:'question'},
             { data:'status', render:function(data, type, row, meta){
               return data.toUpperCase();

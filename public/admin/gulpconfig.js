@@ -25,6 +25,7 @@ module.exports = {
 				'node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
 				'node_modules/toastr/build/toastr.min.css',
 				'node_modules/sweetalert2/dist/sweetalert2.min.css',
+				'node_modules/datatables.net-responsive-bs/css/responsive.bootstrap.min.css',
 				//'node_modules/spectrum-colorpicker/spectrum.css',
 			],
 			app: [
@@ -67,6 +68,7 @@ module.exports = {
 				'node_modules/file-saver/dist/FileSaver.min.js',
 				'node_modules/toastr/build/toastr.min.js',
 				'node_modules/sweetalert2/dist/sweetalert2.min.js',
+				'node_modules/datatables.net-responsive/js/dataTables.responsive.min.js',
 				
 				/* "node_modules/jquery-ui",
 				"node_modules/jquery-ui/ui/widgets/sortable.js",

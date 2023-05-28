@@ -28,6 +28,8 @@
     "bootstrap-toggle": "^2.2.2",
     "datatables.net": "^1.10.20",
     "datatables.net-bs": "^1.10.20",
+    "datatables.net-responsive": "^2.4.1",
+    "datatables.net-responsive-bs": "^2.4.1",
     "eonasdan-bootstrap-datetimepicker": "^4.17.47",
     "file-saver": "^2.0.2",
     "font-awesome": "^4.7.0",
