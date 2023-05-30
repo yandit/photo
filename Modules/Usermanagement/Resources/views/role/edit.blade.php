@@ -11,24 +11,27 @@
       {{-- <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
       <li>User</li>
       <li><a href="{{ route('role.view') }}">Roles</a></li> --}}
-      <li class="active">User</li>
+      {{-- <li class="active">User</li> --}}
     </ol>
   </section>
 
   <!-- Main content -->
   <section class="content">
     <div class="row">
+      <!-- form start -->          
+      {!! Form::open(['route' => ['role.update', $role->id], 'method'=>'PUT', 'role'=>'form', 'autocomplete'=>'off', 'id'=>'formRole']) !!}
       <!-- left column -->
-      <div class="col-md-12">
+      <div class="col-md-8">
         <!-- general form elements -->
         <div class="box box-primary">
           <div class="box-header with-border">
-            <h3 class="box-title"></h3>
+            <h3 class="box-title">Form Role</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
           </div>
           <!-- /.box-header -->
 
-          <!-- form start -->          
-         	{!! Form::open(['route' => ['role.update', $role->id], 'method'=>'PUT', 'role'=>'form', 'autocomplete'=>'off', 'id'=>'formRole']) !!}
             <div class="box-body">
               <div class="form-group {{ ($errors->first('name')) ? 'has-error' : '' }}">
                 <label for="fname">Name <span class="text-danger">*</span></label>
@@ -50,14 +53,48 @@
             <!-- /.box-body -->
 
             <div class="box-footer">
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <div class="pull-right">
+                <a href="{{ route('role.index') }}" class="btn btn-info"><i class="glyphicon glyphicon-backward"></i> Back</a>
+                <button type="submit" class="btn btn-danger"> <i class="glyphicon glyphicon-save"></i> Submit</button>
+              </div>
             </div>
-          {!! Form::close() !!}
 
         </div>
         <!-- /.box -->
       </div>
-      <!--/.col (left) -->        
+      <!--/.col (left) -->  
+      {!! Form::close() !!}    
+      
+      <div class="col-md-4">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Information</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                </div>
+            </div>
+            
+            
+            <div class="box-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td><b>Created By</b></td>
+                            <td>: {{@$role->created_by->name}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Updated By</b></td>
+                            <td>: {{loggedInUser('name')}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Updated At</b></td>
+                            <td>: {{date('d M Y')}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      </div>
     </div>
     <!-- /.row -->
   </section>

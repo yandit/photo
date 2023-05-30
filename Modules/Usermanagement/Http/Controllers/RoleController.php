@@ -41,9 +41,9 @@ class RoleController extends Controller
         
         try{
         	$columnIndex = $allGet['order'][0]['column'];
-            $searchValue = $allGet['search']['value'];
             $startDate = $allGet['startDate'];
             $endDate = $allGet['endDate'];
+            $name = $allGet['name'];
 
         	$roleModel = Role::query();
             if($columnIndex == 0){
@@ -51,8 +51,8 @@ class RoleController extends Controller
             }else{
                 $roleModel->orderBy( $allGet['columns'][$columnIndex]['data'] , $allGet['order'][0]['dir']);
             }
-            if($searchValue){
-                $roleModel->where('name', 'like', "%{$searchValue}%");
+            if($name){
+                $roleModel->where('name', 'like', "%{$name}%");
             }
             if($startDate && $endDate){
                 $roleModel->whereRaw('DATE(created_at) BETWEEN ? AND ?',[$startDate,$endDate]);
@@ -88,7 +88,8 @@ class RoleController extends Controller
 
         $role = Role::create([
             'slug' => $post['slug'],
-            'name' => $post['name']             
+            'name' => $post['name'],
+            'created_by_id' => loggedInUser('id')
         ]);
 
         $request->session()->flash('message', __('usermanagement::admin.create_success'));
@@ -101,6 +102,7 @@ class RoleController extends Controller
         
         $role->slug = $post['slug'];
         $role->name = $post['name'];
+        $role->updated_by_id = loggedInUser('id');
         $role->save();
 
         $request->session()->flash('message', __('usermanagement::admin.update_success'));

@@ -41,7 +41,7 @@ class SettingController extends Controller
             'type' => $post['type'],
             'group' => $post['group'],
         ]);
-        $request->session()->flash('message', __('usermanagement::admin.create_success'));
+        $request->session()->flash('message', __('setting::messages.create_success'));
         return redirect()->route('setting.view');    
 	}
 
@@ -79,7 +79,7 @@ class SettingController extends Controller
             SettingFacade::forgetSetting();
         }
 
-        $request->session()->flash('message', __('usermanagement::admin.update_success'));
+        $request->session()->flash('message', __('setting::messages.update_success'));
         return redirect()->route('setting.view');        
 	}
     
@@ -92,7 +92,7 @@ class SettingController extends Controller
                 $request->session()->flash('error', 'Cannot delete default app value');
             }else{
                 $setting->delete();
-                $request->session()->flash('message', __('usermanagement::admin.delete_success'));
+                $request->session()->flash('message', __('setting::messages.delete_success'));
             }
             
             return redirect()->route('setting.view');

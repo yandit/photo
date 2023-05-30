@@ -15,7 +15,6 @@
 
     <!-- Main content -->
     <section class="content">
-    @include('setting::partials.flash')
       <div class="row">
         <div class="col-xs-12">                    
           {!! Form::open(['route' => 'setting.update', 'autocomplete'=>'off', 'method'=>'PUT', 'enctype' => 'multipart/form-data']) !!}
