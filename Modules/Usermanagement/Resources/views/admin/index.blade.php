@@ -16,40 +16,19 @@
 
   <!-- Main content -->
   <section class="content">
-    @include('usermanagement::admin.partials.flash')
     <div class="row">
       <div class="col-xs-12">
         <div class="box box-primary">
           <div class="box-header">
-            <h3 class="box-title"></h3>
-            <div class="btn-group pull-right m-b-10">
-            	<a class="btn btn-primary" href="{{ route('admin.create') }}" role="button"><i class="fa fa-plus"></i> Add New</a>
-            </div>
-            <div class="clearfix"></div>
+            
           </div>
           <!-- /.box-header -->
           <div class="box-body">
 
-            <!-- custom datatable filter -->
-            <div class="row datatable-custom-filter">
-              <div class="col-sm-1">                  
-                <select name="page_len" id="pageLen" class="form-control">
-                  <option value="10" selected>10</option>
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                </select>
-                entries
-              </div>
-              <div class="col-sm-2">
-                <input type='text' id='startDate' placeholder='start date' class="form-control datepicker">
-              </div>
-              <div class="col-sm-2">
-                <input type='text' id='endDate' placeholder='end date' class="form-control datepicker">
-              </div>
-              <div class="col-sm-2">
-                <input type='text' id='searchFilter' placeholder='search name' class="form-control" autocomplete="off">
-              </div>                
+            <div class="text-center" style="margin-bottom: 30px">
+              <a class="btn btn-sm btn-primary" href="{{ route('admin.create') }}" role="button"><i class="fa fa-plus"></i> Add New</a>
+              <a class="btn btn-sm btn-primary" href="#" data-toggle="modal" data-target="#modal-filter" role="button"><i class="fa fa-filter"></i> Filter</a>
+              <a class="btn btn-sm btn-default hidden clear-filter" role="button"><i class="fa fa-eraser"></i> Clear</a>
             </div>
             
             <div class="table-responsive">
@@ -91,6 +70,39 @@
       <!-- /.col -->
     </div>
     <!-- /.row -->
+
+    <div class="modal fade" id="modal-filter" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title">Filter Data</h3>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="">Name</label>
+              <input type="text" placeholder="name" id="name" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="">Email</label>
+              <input type="text" placeholder="email" id="email" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="">Start Date</label>
+              <input type='text' id='startDate' placeholder='start date' class="form-control datepicker" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="">End Date</label>
+              <input type='text' id='endDate' placeholder='end date' class="form-control datepicker" autocomplete="off">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id=btn-filter class="btn btn-primary">Filter</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </section>
   <!-- /.content -->
 
@@ -103,6 +115,10 @@
 
         var list = "{{ route('admin.list') }}";
         var settings = {
+          responsive: true,
+          columnDefs: [
+            {responsivePriority: 1, targets: -1}
+          ],
           destroy: true,
           scrollCollapse: true,
           autoWidth: false,
@@ -114,7 +130,7 @@
           lengthChange: false,
           searching: false,
           columns: [
-            { data:'no', width: '80px', render:function(data, type, row, meta){
+            { data:null, width: '80px', render:function(data, type, row, meta){
               var json = meta.settings.json;
               return (json.old_start + meta.row + 1);
             }},	                
@@ -131,8 +147,8 @@
               var edit = "{{ route('admin.edit', '#id') }}".replace('#id', data.id);
               var del = "{{ route('admin.delete', '#id') }}".replace('#id', data.id);
 
-              var editButton = `<a class="btn btn-primary btn-space" href="${edit}" admin="button">Edit</a>`;
-              var deleteButton = `<a class="btn btn-danger deleteDialog" href="${del}" data-title="${data.name}" role="button">Delete</a>`;
+              var editButton = `<a class="btn btn-xs btn-primary btn-space" href="${edit}" admin="button"><i class="fa fa-pencil"></i> Edit</a>`;
+              var deleteButton = `<a class="btn btn-xs btn-primary deleteDialog" href="${del}" data-title="${data.name}" role="button"><i class="fa fa-trash"></i> Delete</a>`;
               return editButton + deleteButton;
             }}
           ],
@@ -141,7 +157,8 @@
             data: function(data){
               data.startDate = $('#startDate').val();
               data.endDate = $('#endDate').val();
-              data.search.value = $('#searchFilter').val();
+              data.email = $('#email').val()
+              data.name = $('#name').val()
             },
             timeout: 15000,
             beforeSend: function(request){
@@ -180,16 +197,22 @@
         $('#pageLen').change(function(){
           dataTable.page.len( $(this).val() ).draw()
         });
-        $('#startDate').change(function(){          
-          if($('#endDate').val()){
-            dataTable.draw();
-          }          
-        });
-        $('#endDate').change(function(){          
-          if($('#startDate').val()){
-            dataTable.draw();
-          }          
-        });
+        $('#btn-filter').click(function(){
+          dataTable.draw();
+          $('#modal-filter').modal('hide')
+          $('.clear-filter').removeClass('hidden')
+        })
+
+        $('.clear-filter').click(function(){
+          $('#startDate').val('');
+          $('#endDate').val('');
+          $('#name').val('');
+          $('#email').val('');
+          dataTable.draw();
+          $(this).addClass('hidden')
+        })
+
+        handleDeleteDialog(dataTable)
 
       });
     </script>

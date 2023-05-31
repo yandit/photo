@@ -54,8 +54,8 @@
 
             <div class="box-footer">
               <div class="pull-right">
-                <a href="{{ route('role.index') }}" class="btn btn-info"><i class="glyphicon glyphicon-backward"></i> Back</a>
-                <button type="submit" class="btn btn-danger"> <i class="glyphicon glyphicon-save"></i> Submit</button>
+                <a href="{{ route('role.index') }}" class="btn btn-danger"><i class="glyphicon glyphicon-backward"></i> Back</a>
+                <button type="submit" class="btn btn-primary"> <i class="glyphicon glyphicon-save"></i> Submit</button>
               </div>
             </div>
 

@@ -20,6 +20,8 @@ class User extends EloquentUser implements AuthenticatableContract
         'name',
         'phone',
         'address',
+        'created_by_id',
+        'updated_by_id'
     ];
 
     protected $dates = [
@@ -44,4 +46,8 @@ class User extends EloquentUser implements AuthenticatableContract
         return $query;
     }
     
+    public function created_by()
+    {
+        return $this->belongsTo(self::class);
+    }
 }

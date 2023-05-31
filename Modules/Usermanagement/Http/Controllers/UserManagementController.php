@@ -45,9 +45,10 @@ class UserManagementController extends Controller
 
         try{
             $columnIndex = $allGet['order'][0]['column'];
-            $searchValue = $allGet['search']['value'];
             $startDate = $allGet['startDate'];
             $endDate = $allGet['endDate'];
+            $name = $allGet['name'];
+            $email = $allGet['email'];
 
             $userModel = User::query()->adminUser();
 
@@ -56,8 +57,11 @@ class UserManagementController extends Controller
             }else{
                 $userModel = $userModel->orderBy( $allGet['columns'][$columnIndex]['data'] , $allGet['order'][0]['dir']);
             }
-            if($searchValue){
-                $userModel = $userModel->where('users.name', 'like', "%{$searchValue}%");
+            if($name){
+                $userModel = $userModel->where('users.name', 'like', "%{$name}%");
+            }
+            if($email){
+                $userModel = $userModel->where('users.email', 'like', "%{$email}%");
             }
             if($startDate && $endDate){
                 $userModel = $userModel->whereRaw('DATE(users.created_at) BETWEEN ? AND ?',[$startDate,$endDate]);
@@ -117,6 +121,7 @@ class UserManagementController extends Controller
                 'name' => $post['name'],
                 'phone' => !empty($post['phone']) ? $post['phone'] : '',
                 'address' => !empty($post['address']) ? $post['address'] : '',                
+                'created_by_id' => loggedInUser('id')
             ];
             
             $user = Sentinel::register($credentials);
@@ -179,6 +184,7 @@ class UserManagementController extends Controller
         $user->name = $post['name'];
         $user->phone = !empty($post['phone']) ? $post['phone'] : '';
         $user->address = !empty($post['address']) ? $post['address'] : '';            
+        $user->updated_by_id = loggedInUser('id');
 
         if(!isset($user->role->id)){
             $role = Sentinel::findRoleById($post['role']);
