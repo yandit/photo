@@ -32,7 +32,7 @@ class User extends EloquentUser implements AuthenticatableContract
 
     public function role()
     {
-        return $this->hasOneThrough(Role::class, RoleUser::class, 'role_id','id');
+        return $this->hasOneThrough(Role::class, RoleUser::class, 'user_id','id','id','role_id');
     }
 
 
