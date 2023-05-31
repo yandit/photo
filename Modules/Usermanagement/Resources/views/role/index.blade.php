@@ -88,7 +88,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" id=btn-filter class="btn btn-danger">Filter</button>
+              <button type="button" id=btn-filter class="btn btn-primary">Filter</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
           </div>
