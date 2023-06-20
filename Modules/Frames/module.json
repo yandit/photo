@@ -1,0 +1,13 @@
+{
+    "name": "Frames",
+    "alias": "frames",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Frames\\Providers\\FramesServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
