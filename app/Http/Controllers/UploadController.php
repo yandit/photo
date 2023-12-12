@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Upload;
 use Illuminate\Http\Request;
+
+// helper
 use App\Http\Controllers\CloudinaryStorage;
+
+// models
+// use App\Upload;
 
 class UploadController extends Controller
 {
@@ -15,7 +20,8 @@ class UploadController extends Controller
      */
     public function index()
     {
-        return view('upload.index');
+        $uploads = Upload::get();
+        return view('upload.index', compact('uploads'));
     }
 
     /**
