@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Upload;
 use Illuminate\Http\Request;
 
+use Storage;
+use Illuminate\Http\Response;
+
 // helper
 use App\Http\Controllers\CloudinaryStorage;
 
@@ -21,7 +24,9 @@ class UploadController extends Controller
     public function index()
     {
         $uploads = Upload::get();
-        return view('upload.index', compact('uploads'));
+
+        $files = Storage::disk('google')->listContents('/lokasi a/', false);
+        return view('upload.index', compact('uploads', 'files'));
     }
 
     /**
@@ -93,5 +98,15 @@ class UploadController extends Controller
     public function destroy(Upload $upload)
     {
         //
+    }
+
+    public function getImage($filename)
+    {
+        $file = Storage::disk('google')->get($filename);
+        
+        return new Response($file, 200, [
+            'Content-Type' => 'image/jpeg', // Ganti tipe mime sesuai dengan tipe gambar yang diinginkan
+            'Content-Disposition' => 'inline',
+        ]);
     }
 }

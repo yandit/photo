@@ -8,5 +8,17 @@
     @foreach ($uploads as $upload)
     <img width="100px" src="{{ $upload->image }}" alt="">
     @endforeach
+    <br>
+    ==============================
+    <br>
+    <ul>
+        @foreach ($files as $file)
+            @if (strpos($file['mimetype'], 'image') !== false)
+                <li>
+                    <img width="100px" src="{{ route('get.image', ['filename' => $file['basename']]) }}" alt="{{ $file['basename'] }}">
+                </li>
+            @endif
+        @endforeach
+    </ul>
 </form>
 @endsection

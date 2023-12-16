@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,10 +11,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['middleware' => ['web'], 'prefix' => config('usermanagement.admin_prefix')], function () {
+    Route::group(['prefix'=> 'google-drive', 'middleware'=> config('usermanagement.middleware')],function(){
+        Route::get('/gallery', 'GoogleDriveMediaController@index')->name('googledrivegallery.index');
+    });
 });
-
-Route::get('/upload', 'App\Http\Controllers\UploadController@index')->name('upload.index');
-Route::post('/upload', 'App\Http\Controllers\UploadController@store')->name('upload.store');
-Route::get('/get-image/{filename}', 'App\Http\Controllers\UploadController@getImage')->name('get.image');

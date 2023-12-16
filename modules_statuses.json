@@ -1,7 +1,7 @@
 {
-    
     "UserManagement": true,
     "Setting": true,
     "Faq": true,
-    "Frames": true
+    "Frames": true,
+    "GoogleDriveMedia": true
 }

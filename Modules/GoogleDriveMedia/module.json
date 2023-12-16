@@ -1,0 +1,13 @@
+{
+    "name": "GoogleDriveMedia",
+    "alias": "googledrivemedia",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\GoogleDriveMedia\\Providers\\GoogleDriveMediaServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
