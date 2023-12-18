@@ -20,6 +20,7 @@ class CreateCredentialDetailsTable extends Migration
             $table->string('client_secret');
             $table->string('refresh_token');
             $table->string('disk_name');
+            $table->boolean('is_active');
             $table->timestamps();
         });
     }

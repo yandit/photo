@@ -9,6 +9,8 @@ use Modules\Customer\Entities\Customer;
 use Modules\Customer\Transformers\CustomerResource;
 use Modules\GoogleDriveMedia\Entities\Credential;
 
+use Modules\GoogleDriveMedia\Http\Requests\CredentialRequest;
+
 class CredentialController extends Controller
 {
     /**
@@ -112,7 +114,8 @@ class CredentialController extends Controller
      */
     public function edit(Customer $customer)
     {
-        $credential = Credential::find($customer->id);
+        $credential = Credential::where('customer_id', $customer->id)->first();
+        
         return view('googledrivemedia::credential.edit', compact('customer', 'credential'));
     }
 
@@ -122,7 +125,7 @@ class CredentialController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, Customer $customer)
+    public function update(CredentialRequest $request, Customer $customer)
     {
         $post = $request->all();
         $credential = Credential::updateOrCreate(
