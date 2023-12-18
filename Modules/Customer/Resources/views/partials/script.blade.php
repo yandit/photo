@@ -1,7 +1,7 @@
 <script>
   $(document).ready(function(){          
     
-    $('#formFaq')
+    $('#formCustomer')
       .parsley(parsleyOptions);
     
   });    

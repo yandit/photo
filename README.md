@@ -37,6 +37,8 @@ Here are the steps to install and run this project on your local machine.
 7. Run migrations and seed the database if needed:
 
     ```bash
+    php artisan migrate
+    
     php artisan module:migrate
 
     php artisan module:seed

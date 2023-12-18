@@ -1,10 +1,10 @@
-@extends('customer::layouts.default')
+@extends('faq::layouts.default')
 
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Create Customer
+            Create FAQ
             <small></small>
         </h1>
     </section>
@@ -13,12 +13,12 @@
     <section class="content">
         <div class="row">
             <!-- left column -->
-            {!! Form::open(['route' => 'customer.store', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'formCustomer']) !!}
+            {!! Form::open(['route' => 'faq.store', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'formFaq']) !!}
             <div class="col-md-8">
                 <!-- general form elements -->
-                <div class="box box-success">
+                <div class="box box-danger">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Form Customer</h3>
+                        <h3 class="box-title">Form FAQ</h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         </div>
@@ -27,31 +27,41 @@
                     
                     <div class="box-body">
 
-                        <div class="form-group {{ $errors->first('name') ? 'has-error' : '' }}">
-                            <label for="fname">Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="fname" placeholder="Name" onkeyup="slugify(this,'#fslug')"
-                                name="name" value="{{ old('name') }}" required
+                        <div class="form-group {{ $errors->first('question') ? 'has-error' : '' }}">
+                            <label for="fquestion">Question <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="fquestion" placeholder="Question"
+                                name="question" value="{{ old('question') }}" required
                                 data-parsley-trigger="keyup focusout">
-                            @if ($errors->has('name'))
-                                <span class="help-block">{{ $errors->first('name') }}</span>
+                            @if ($errors->has('question'))
+                                <span class="help-block">{{ $errors->first('question') }}</span>
                             @endif
                         </div>
 
-                        <div class="form-group">
-                            <label for="fslug">Slug <span class="text-danger">*</span></label>                  
-                            <input type="text" class="form-control" id="fslug" placeholder="Slug" name="slug" value="{{ old('slug') }}" onkeypress="slugFormat(event)"
-                                required data-parsley-trigger="keyup focusout">
-                            @if($errors->has('slug'))										
-                                <span class="help-block">{{ $errors->first('slug') }}</span>
+                        <div class="form-group {{ $errors->first('answer') ? 'has-error' : '' }}">
+                            <label for="fanswer">Answer <span class="text-danger">*</span></label>
+                            <input type="text" name="answer" class="form-control" id="fanswer" rows="4" required
+                                data-parsley-trigger="keyup focusout" value="{{ old('answer') }}" placeholder="Answer">
+                            @if ($errors->has('answer'))
+                                <span class="help-block">{{ $errors->first('answer') }}</span>
                             @endif
-                        </div>                
+                        </div>
+
+                        <div class="form-group {{ $errors->first('order') ? 'has-error' : '' }}">
+                            <label for="forder">Order <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="forder" placeholder="Order"
+                                name="order" value="{{ old('order') }}" required
+                                data-parsley-trigger="keyup focusout">
+                            @if ($errors->has('order'))
+                                <span class="help-block">{{ $errors->first('order') }}</span>
+                            @endif
+                        </div>
 
                         <div class="form-group {{ $errors->first('status') ? 'has-error' : '' }}">
                             <label for="fstatus">Status</label>
                             <select class="form-control" name="status" id="fstatus" required
                                 data-parsley-trigger="keyup focusout">
                                 <option value="">-- Select Option --</option>
-                                @foreach (config('customer.enable_disable') as $status)
+                                @foreach (config('faq.enable_disable') as $status)
                                     @php
                                         $selected = $status['value'] == 'enable' ? 'selected' : '';
                                         if (old('status') == $status['value']) {
@@ -72,8 +82,8 @@
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <div class="pull-right">
-                            <a href="{{ route('customer.index') }}" class="btn btn-info"><i class="glyphicon glyphicon-backward"></i> Back</a>
-                            <button type="submit" class="btn btn-success"> <i class="glyphicon glyphicon-save"></i> Submit</button>
+                            <a href="{{ route('faq.index') }}" class="btn btn-info"><i class="glyphicon glyphicon-backward"></i> Back</a>
+                            <button type="submit" class="btn btn-danger"> <i class="glyphicon glyphicon-save"></i> Submit</button>
                         </div>
                     </div>
                     
@@ -82,7 +92,7 @@
             </div>
             <!--/.col (left) -->
             <div class="col-md-4">
-                <div class="box box-success">
+                <div class="box box-danger">
                     <div class="box-header">
                         <h3 class="box-title">Information</h3>
                         <div class="box-tools pull-right">
@@ -116,5 +126,5 @@
 
 @section('script')
     @parent
-    @include('customer::partials.script')
+    @include('faq::partials.script')
 @endsection
