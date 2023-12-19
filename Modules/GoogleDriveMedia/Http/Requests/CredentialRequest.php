@@ -13,7 +13,7 @@ class CredentialRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->route('id');
+        $id = @$this->route('customer')->credential->id;
         $appends = [];
         return array_merge([            
             'path' => 'required|unique:credentials,path,'.$id,

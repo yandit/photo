@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller;
 use Modules\Customer\Entities\Customer;
 use Modules\Customer\Transformers\CustomerResource;
 use Modules\GoogleDriveMedia\Entities\Credential;
+use Modules\GoogleDriveMedia\Entities\CredentialDetail;
 
 use Modules\GoogleDriveMedia\Http\Requests\CredentialRequest;
 
@@ -136,6 +137,28 @@ class CredentialController extends Controller
                 'updated_by_id'=> loggedInUser('id')
             ]
         );
+
+        foreach ($request->input('disk_name') as $key => $value) {
+            $credentialId = $request->input('id')[$key];
+
+            $isDeleted = $request->input('is_deleted')[$key];
+            // Buat atau perbarui data berdasarkan ID
+            if($isDeleted == 'false'){
+                CredentialDetail::updateOrCreate(
+                    ['id' => $credentialId],
+                    [
+                        'credential_id' => $credential->id,
+                        'disk_name' => $request->input('disk_name')[$key],
+                        'client_id' => $request->input('client_id')[$key],
+                        'client_secret' => $request->input('client_secret')[$key],
+                        'refresh_token' => $request->input('refresh_token')[$key],
+                        'is_active' => $request->input('is_active')[$key]
+                    ]
+                );
+            }else{
+                CredentialDetail::where('id', $credentialId)->delete();
+            }
+        }
 
         $request->session()->flash('message', __('googledrivemedia::messages.update_success'));
         return redirect()->route('googledrivecredential.index');

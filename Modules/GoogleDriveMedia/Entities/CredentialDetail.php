@@ -13,6 +13,7 @@ class CredentialDetail extends Model
         'client_id',
         'client_secret',
         'refresh_token',
-        'disk_name'
+        'disk_name',
+        'is_active'
     ];
 }

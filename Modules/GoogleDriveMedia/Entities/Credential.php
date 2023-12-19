@@ -15,6 +15,11 @@ class Credential extends Model
         'created_by_id',
         'updated_by_id'
     ];
+
+    public function credential_details()
+    {
+        return $this->hasMany(CredentialDetail::class);
+    }
     
     protected static function newFactory()
     {

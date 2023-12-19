@@ -1,7 +1,7 @@
 <script>
   $(document).ready(function(){          
     
-    $('#formFrames')
+    $('#formGoogleDriveMedia')
       .parsley(parsleyOptions);
     
   });    
