@@ -9,6 +9,7 @@ use Modules\Customer\Entities\Customer;
 use Modules\Customer\Transformers\CustomerResource;
 use Modules\GoogleDriveMedia\Entities\Credential;
 use Modules\GoogleDriveMedia\Entities\CredentialDetail;
+use Modules\GoogleDriveMedia\Entities\Disk;
 
 use Modules\GoogleDriveMedia\Http\Requests\CredentialRequest;
 
@@ -116,8 +117,8 @@ class CredentialController extends Controller
     public function edit(Customer $customer)
     {
         $credential = Credential::where('customer_id', $customer->id)->first();
-        
-        return view('googledrivemedia::credential.edit', compact('customer', 'credential'));
+        $disks = Disk::all();
+        return view('googledrivemedia::credential.edit', compact('customer', 'credential', 'disks'));
     }
 
     /**
@@ -138,7 +139,7 @@ class CredentialController extends Controller
             ]
         );
 
-        foreach ($request->input('disk_name') as $key => $value) {
+        foreach ($request->input('disk_id') as $key => $value) {
             $credentialId = $request->input('id')[$key];
 
             $isDeleted = $request->input('is_deleted')[$key];
@@ -148,10 +149,7 @@ class CredentialController extends Controller
                     ['id' => $credentialId],
                     [
                         'credential_id' => $credential->id,
-                        'disk_name' => $request->input('disk_name')[$key],
-                        'client_id' => $request->input('client_id')[$key],
-                        'client_secret' => $request->input('client_secret')[$key],
-                        'refresh_token' => $request->input('refresh_token')[$key],
+                        'disk_id' => $request->input('disk_id')[$key],
                         'is_active' => $request->input('is_active')[$key]
                     ]
                 );

@@ -21,7 +21,10 @@ $(document).ready(function(){
         zIndexOffset: 2000
     });
     
-    $('.select2').select2();
+    $('.select2').select2({
+        placeholder: 'Please Select...',
+        width: '100%'
+    });
     $('.select2-tag').select2({
         tags: true
     });

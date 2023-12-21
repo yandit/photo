@@ -55,32 +55,25 @@
                                     <table class="table table-bordered table-condensed" id="table-credential-details">
                                         <thead>
                                             <tr>
-                                                <th>Disk Name</th>
-                                                <th>Client Id</th>
-                                                <th>Client Secret</th>
-                                                <th>Refresh Token</th>
+                                                <th>Disk</th>
                                                 <th>Active</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if($credential->credential_details->count())
+                                            @if($credential)
                                                 @foreach($credential->credential_details as $detail)
                                                     <tr>
                                                         <td class="hidden id">
                                                             <input type="text" name="id[]" value="{{ $detail->id }}">
                                                         </td>
                                                         <td>
-                                                            <input type="text" name="disk_name[]" value="{{$detail->disk_name}}" class="form-control" placeholder="Disk Name">
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" name="client_id[]" value="{{ $detail->client_id }}" class="form-control" placeholder="Client Id">
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" name="client_secret[]" value="{{ $detail->client_secret }}" class="form-control" placeholder="Client Secret">
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" name="refresh_token[]" value="{{ $detail->refresh_token }}" class="form-control" placeholder="Refresh Token">
+                                                        <select name="disk_id[]" class="select2" style="width: 100%" placeholder="Disk Name">
+                                                            <option value=""></option>
+                                                            @foreach($disks as $disk)
+                                                                <option value="{{ $disk->id }}" {{$detail->disk_id == $disk->id ? 'selected': ''}}>{{ $disk->disk_name }}</option>
+                                                            @endforeach
+                                                        </select>
                                                         </td>
                                                         <td>
                                                             <input type="checkbox" class="is_active" value="{{ $detail->is_active }}" {{$detail->is_active ? 'checked': ''}}>
@@ -102,16 +95,12 @@
                                                         <input type="text" name="id[]">
                                                     </td>
                                                     <td>
-                                                        <input type="text" name="disk_name[]" class="form-control" placeholder="Disk Name">
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" name="client_id[]" class="form-control" placeholder="Client Id">
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" name="client_secret[]" class="form-control" placeholder="Client Secret">
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" name="refresh_token[]" class="form-control" placeholder="Refresh Token">
+                                                        <select name="disk_id[]" class="select2" style="width: 100%" placeholder="Disk Name">
+                                                            <option value=""></option>
+                                                            @foreach($disks as $disk)
+                                                                <option value="{{ $disk->id }}">{{ $disk->disk_name }}</option>
+                                                            @endforeach
+                                                        </select>
                                                     </td>
                                                     <td>
                                                         <input type="checkbox" class="is_active">
@@ -206,22 +195,22 @@
 
         const handleAddRow = function(){
             $('#add-row').click(function(){
+                let disks = {!! json_encode($disks->toArray()) !!};
+                // disks.forEach(function(v){
+                //     return `<option value="${v.id}">${v.disk_name}</option>`
+                // })
                 const templates = `
                     <tr>
                         <td class="hidden id">
                             <input type="text" name="id[]">
                         </td>
                         <td>
-                            <input type="text" name="disk_name[]" class="form-control" placeholder="Disk Name">
-                        </td>
-                        <td>
-                            <input type="text" name="client_id[]" class="form-control" placeholder="Client Id">
-                        </td>
-                        <td>
-                            <input type="text" name="client_secret[]" class="form-control" placeholder="Client Secret">
-                        </td>
-                        <td>
-                            <input type="text" name="refresh_token[]" class="form-control" placeholder="Refresh Token">
+                            <select name="disk_id[]" class="select2">
+                                <option value=""></option>
+                                ${(disks.map(function(v){
+                                    return `<option value="${v.id}">${v.disk_name}</option>`
+                                }))}
+                            </select>
                         </td>
                         <td>
                             <input type="checkbox" class="is_active">
@@ -239,6 +228,10 @@
                 `
 
                 $('#table-credential-details').find('tbody').append(templates)
+                $('.select2').select2({
+                    placeholder: 'Please Select...',
+                    width: '100%'
+                });
             })
         }
 
