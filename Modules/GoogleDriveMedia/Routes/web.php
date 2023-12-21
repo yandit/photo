@@ -13,6 +13,16 @@
 
 Route::group(['middleware' => ['web'], 'prefix' => config('usermanagement.admin_prefix')], function () {
     Route::group(['prefix'=> 'google-drive', 'middleware'=> config('usermanagement.middleware')],function(){
+        Route::group(['prefix'=> 'disk'],function(){
+            Route::get('/', 'DiskController@index')->name('googledrivedisk.index');
+            Route::get('create','DiskController@create')->name('googledrivedisk.create');
+            Route::get('edit/{disk}','DiskController@edit')->name('googledrivedisk.edit');
+            Route::post('list','DiskController@list')->name('googledrivedisk.list');
+            Route::post('/','DiskController@store')->name('googledrivedisk.store');
+            Route::put('{disk}','DiskController@update')->name('googledrivedisk.update');
+            Route::delete('delete/{disk}','DiskController@delete')->name('googledrivedisk.delete');	
+        });
+
         Route::group(['prefix'=> 'credential'],function(){
             Route::get('/', 'CredentialController@index')->name('googledrivecredential.index');
             Route::get('create','CredentialController@create')->name('googledrivecredential.create');

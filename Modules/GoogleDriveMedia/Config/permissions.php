@@ -27,4 +27,31 @@ return [
 			'code' => 'googledrivecredential.edit',
 			'parent' => 'googledrivecredential'
 		],
+	
+	// googledrivedisk
+	[
+		'name' => 'Disk',
+		'code' => 'googledrivedisk',
+		'parent' => '0'
+	],
+		[
+			'name' => 'Create Disk',
+			'code' => 'googledrivedisk.create',
+			'parent' => 'googledrivedisk'
+		],
+		[
+			'name' => 'Disk List',
+			'code' => 'googledrivedisk.index',
+			'parent' => 'googledrivedisk'
+		],
+		[
+			'name' => 'Update Disk',
+			'code' => 'googledrivedisk.edit',
+			'parent' => 'googledrivedisk'
+		],
+		[
+			'name' => 'Delete Disk',
+			'code' => 'googledrivedisk.delete',
+			'parent' => 'googledrivedisk'
+		],
 ];

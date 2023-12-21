@@ -9,6 +9,11 @@
 			'order'=> 2,
 			'subs' => [
 				[
+					'name' => 'Disk',								
+					'permission' => 'googledrivedisk.index',
+					'path' => $prefix.'/google-drive/disk',
+				],
+				[
 					'name' => 'Credential',								
 					'permission' => 'googledrivecredential.index',
 					'path' => $prefix.'/google-drive/credential',

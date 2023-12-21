@@ -16,10 +16,7 @@ class CreateCredentialDetailsTable extends Migration
         Schema::create('credential_details', function (Blueprint $table) {
             $table->id();
             $table->integer('credential_id')->unsigned();
-            $table->string('client_id');
-            $table->string('client_secret');
-            $table->string('refresh_token');
-            $table->string('disk_name');
+            $table->integer('disk_id')->unsigned();
             $table->boolean('is_active');
             $table->timestamps();
         });

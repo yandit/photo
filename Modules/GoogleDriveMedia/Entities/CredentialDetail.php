@@ -10,10 +10,7 @@ class CredentialDetail extends Model
 
     protected $fillable = [
         'credential_id',
-        'client_id',
-        'client_secret',
-        'refresh_token',
-        'disk_name',
+        'disk_id',
         'is_active'
     ];
 }

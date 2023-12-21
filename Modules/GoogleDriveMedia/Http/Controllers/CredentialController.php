@@ -51,7 +51,7 @@ class CredentialController extends Controller
                 $customerModel->whereRaw(' ( name like ? ) ', [$likeSearch]);
             }
             if ($startDate && $endDate) {
-                $customerModel->whereRaw('DATE(faqs.created_at) BETWEEN ? AND ?', [$startDate, $endDate]);
+                $customerModel->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$startDate, $endDate]);
             }
 
             $countTable = $customerModel->count();
