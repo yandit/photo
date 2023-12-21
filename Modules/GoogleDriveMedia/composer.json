@@ -19,5 +19,8 @@
         "psr-4": {
             "Modules\\GoogleDriveMedia\\": ""
         }
+    },
+    "require": {
+        "masbug/flysystem-google-drive-ext": "^1.0.0"
     }
 }

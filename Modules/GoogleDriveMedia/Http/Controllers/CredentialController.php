@@ -12,6 +12,7 @@ use Modules\GoogleDriveMedia\Entities\CredentialDetail;
 use Modules\GoogleDriveMedia\Entities\Disk;
 
 use Modules\GoogleDriveMedia\Http\Requests\CredentialRequest;
+use Illuminate\Support\Facades\DB;
 
 class CredentialController extends Controller
 {
@@ -129,37 +130,55 @@ class CredentialController extends Controller
      */
     public function update(CredentialRequest $request, Customer $customer)
     {
-        $post = $request->all();
-        $credential = Credential::updateOrCreate(
-            ['customer_id'=> $customer->id],
-            [
-                'path'=> $post['path'], 
-                'created_by_id'=> loggedInUser('id'),
-                'updated_by_id'=> loggedInUser('id')
-            ]
-        );
+        DB::beginTransaction();
+        try {
+            $post = $request->all();
+            $credential = Credential::updateOrCreate(
+                ['customer_id'=> $customer->id],
+                [
+                    'path'=> $post['path'], 
+                    'created_by_id'=> loggedInUser('id'),
+                    'updated_by_id'=> loggedInUser('id')
+                ]
+            );
+            
+            // if (!$request->input('disk_id')) {
+            //     throw new \Exception('Minimum 1 API Credential');
+            // }
 
-        foreach ($request->input('disk_id') as $key => $value) {
-            $credentialId = $request->input('id')[$key];
+            foreach ($request->input('disk_id') as $key => $value) {
+                $credentialId = $request->input('id')[$key];
 
-            $isDeleted = $request->input('is_deleted')[$key];
-            // Buat atau perbarui data berdasarkan ID
-            if($isDeleted == 'false'){
-                CredentialDetail::updateOrCreate(
-                    ['id' => $credentialId],
-                    [
-                        'credential_id' => $credential->id,
-                        'disk_id' => $request->input('disk_id')[$key],
-                        'is_active' => $request->input('is_active')[$key]
-                    ]
-                );
-            }else{
-                CredentialDetail::where('id', $credentialId)->delete();
+                $isDeleted = $request->input('is_deleted')[$key];
+                // Buat atau perbarui data berdasarkan ID
+                if($isDeleted == 'false'){
+                    CredentialDetail::updateOrCreate(
+                        ['id' => $credentialId],
+                        [
+                            'credential_id' => $credential->id,
+                            'disk_id' => $request->input('disk_id')[$key],
+                            'is_active' => $request->input('is_active')[$key]
+                        ]
+                    );
+                }else{
+                    CredentialDetail::where('id', $credentialId)->delete();
+                }
             }
-        }
+            
+            DB::commit();
 
-        $request->session()->flash('message', __('googledrivemedia::messages.update_success'));
-        return redirect()->route('googledrivecredential.index');
+            $request->session()->flash('message', __('googledrivemedia::messages.update_success'));
+            return redirect()->route('googledrivecredential.index');
+        } catch (\Exception $e) {
+            // Rollback the database transaction in case of an error
+            $message = $e->getMessage();
+            $request->session()->flash('error', $message);
+            DB::rollback();
+        }
+        
+        return redirect()->route('googledrivecredential.edit', [
+            'customer' => $customer
+        ])->withInput();
     }
 
     /**
