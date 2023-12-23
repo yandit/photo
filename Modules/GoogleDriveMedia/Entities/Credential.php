@@ -4,6 +4,8 @@ namespace Modules\GoogleDriveMedia\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Customer\Entities\Customer;
+use Modules\UserManagement\Entities\User;
 
 class Credential extends Model
 {
@@ -19,6 +21,16 @@ class Credential extends Model
     public function credential_details()
     {
         return $this->hasMany(CredentialDetail::class);
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function created_by()
+    {
+        return $this->belongsTo(User::class);
     }
     
     protected static function newFactory()

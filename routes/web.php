@@ -19,4 +19,4 @@ Route::get('/', function () {
 
 Route::get('/upload', 'App\Http\Controllers\UploadController@index')->name('upload.index');
 Route::post('/upload', 'App\Http\Controllers\UploadController@store')->name('upload.store');
-Route::get('/get-image/{filename}', 'App\Http\Controllers\UploadController@getImage')->name('get.image');
+Route::get('/get-image', 'App\Http\Controllers\UploadController@getImage')->name('get.image');

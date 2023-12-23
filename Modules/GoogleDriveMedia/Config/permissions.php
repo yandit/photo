@@ -11,6 +11,21 @@ return [
 			'code' => 'googledrivegallery.index',
 			'parent' => 'googledrivegallery'
 		],
+		[
+			'name' => 'Update Gallery',
+			'code' => 'googledrivegallery.edit',
+			'parent' => 'googledrivegallery'
+		],
+		[
+			'name' => 'Delete Image Gallery',
+			'code' => 'googledrivegallery.delete',
+			'parent' => 'googledrivegallery'
+		],
+		[
+			'name' => 'Create Image Gallery',
+			'code' => 'googledrivegallery.create',
+			'parent' => 'googledrivegallery'
+		],
 	
 	[
 		'name' => 'Credential',

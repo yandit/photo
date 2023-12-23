@@ -32,6 +32,16 @@ Route::group(['middleware' => ['web'], 'prefix' => config('usermanagement.admin_
             Route::put('{customer}','CredentialController@update')->name('googledrivecredential.update');
             Route::delete('delete/{customer}','CredentialController@delete')->name('googledrivecredential.delete');	
         });
-        Route::get('/gallery', 'GoogleDriveMediaController@index')->name('googledrivegallery.index');
+
+        Route::group(['prefix'=> 'gallery'],function(){
+            Route::get('/', 'GalleryController@index')->name('googledrivegallery.index');
+            Route::get('create/{credential}','GalleryController@create')->name('googledrivegallery.create');
+            Route::get('edit/{credential}','GalleryController@edit')->name('googledrivegallery.edit');
+            Route::post('list','GalleryController@list')->name('googledrivegallery.list');
+            Route::post('/{credential}','GalleryController@store')->name('googledrivegallery.store');
+            Route::put('{credential}','GalleryController@update')->name('googledrivegallery.update');
+            Route::match(['get', 'post'], 'delete/{credential}','GalleryController@delete')->name('googledrivegallery.delete');	
+        });
+        // Route::get('/gallery', 'GoogleDriveMediaController@index')->name('googledrivegallery.index');
     });
 });

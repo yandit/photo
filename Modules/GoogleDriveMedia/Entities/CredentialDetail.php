@@ -13,4 +13,9 @@ class CredentialDetail extends Model
         'disk_id',
         'is_active'
     ];
+
+    public function disk()
+    {
+        return $this->belongsTo(Disk::class);
+    }
 }

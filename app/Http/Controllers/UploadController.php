@@ -100,9 +100,11 @@ class UploadController extends Controller
         //
     }
 
-    public function getImage($filename)
+    public function getImage(Request $request)
     {
-        $file = Storage::disk('google')->get($filename);
+        $path = $request->query('path');
+        $disk_name = $request->query('disk_name');
+        $file = Storage::disk($disk_name)->get($path);
         
         return new Response($file, 200, [
             'Content-Type' => 'image/jpeg', // Ganti tipe mime sesuai dengan tipe gambar yang diinginkan
