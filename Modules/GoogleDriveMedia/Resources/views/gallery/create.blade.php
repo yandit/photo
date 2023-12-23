@@ -41,7 +41,7 @@
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <div class="pull-right">
-                            <a href="{{ route('faq.index') }}" class="btn btn-info"><i class="glyphicon glyphicon-backward"></i> Back</a>
+                            <a href="{{ route('googledrivegallery.edit', ['credential'=> $credential]) }}" class="btn btn-info"><i class="glyphicon glyphicon-backward"></i> Back</a>
                             <button type="submit" class="btn btn-danger"> <i class="glyphicon glyphicon-save"></i> Submit</button>
                         </div>
                     </div>

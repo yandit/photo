@@ -37,7 +37,7 @@
                             @endif
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group {{ $errors->first('slug') ? 'has-error' : '' }}">
                             <label for="fslug">Slug <span class="text-danger">*</span></label>                  
                             <input type="text" class="form-control" id="fslug" placeholder="Slug" name="slug" value="{{ old('slug') }}" onkeypress="slugFormat(event)"
                                 required data-parsley-trigger="keyup focusout">

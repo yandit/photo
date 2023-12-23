@@ -107,7 +107,7 @@ class GalleryController extends Controller
             \Storage::disk($disk_name)->put($path, file_get_contents($file));
         }
 
-        return redirect()->back();
+        return redirect()->route('googledrivegallery.edit', ['credential'=> $credential]);
     }
 
     /**

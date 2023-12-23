@@ -13,11 +13,11 @@ class CustomerRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->route('id');
+        $id = @$this->route('customer')->id;
         $appends = [];
         return array_merge([            
-            'name' => 'required',
-            'slug' => 'required',
+            'name' => 'required|unique:customers,name,' . $id,
+            'slug' => 'required|unique:customers,slug,' . $id,
             'status' => 'required:in:enable,disable',
         ], $appends);
     }

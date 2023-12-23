@@ -7,7 +7,8 @@ return [
     // exception for middleware checking
     'permission_exceptions' => [
         'admin.profile',
-        'admin.profile_update'
+        'admin.profile_update',
+        'googledrive.get'
     ],
 
     // list role
