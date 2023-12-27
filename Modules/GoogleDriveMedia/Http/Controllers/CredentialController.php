@@ -137,6 +137,8 @@ class CredentialController extends Controller
                 ['customer_id'=> $customer->id],
                 [
                     'path'=> $post['path'], 
+                    'status'=> $post['status'], 
+                    'pin'=> $post['pin'], 
                     'created_by_id'=> loggedInUser('id'),
                     'updated_by_id'=> loggedInUser('id')
                 ]

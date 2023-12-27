@@ -18,6 +18,8 @@ class CreateCredentialsTable extends Migration
 
             $table->integer('customer_id')->unsigned();
             $table->string('path')->unique();
+            $table->string('status')->default('enable');
+            $table->string('pin');
             $table->integer('created_by_id')->unsigned()->nullable();
             $table->integer('updated_by_id')->unsigned()->nullable();
 

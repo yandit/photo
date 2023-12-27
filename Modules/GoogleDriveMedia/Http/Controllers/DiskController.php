@@ -96,6 +96,8 @@ class DiskController extends Controller
         $post = $request->all();
         Disk::create([
             'disk_name' => $post['disk_name'],
+            'email' => $post['email'],
+            'password' => $post['password'],
             'client_id' => $post['client_id'],
             'client_secret' => $post['client_secret'],
             'refresh_token' => $post['refresh_token'],
@@ -135,6 +137,8 @@ class DiskController extends Controller
     {
         $post = $request->all();
         $disk->disk_name = $post['disk_name'];
+        $disk->email = $post['email'];
+        $disk->password = $post['password'];
         $disk->client_id = $post['client_id'];
         $disk->client_secret = $post['client_secret'];
         $disk->refresh_token = $post['refresh_token'];

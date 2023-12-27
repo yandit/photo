@@ -41,6 +41,34 @@
                                 <span class="help-block">{{ $errors->first('path') }}</span>
                             @endif
                         </div>
+
+                        <div class="form-group {{ $errors->first('status') ? 'has-error' : '' }}">
+                            <label for="fstatus">Status</label>
+                            <select class="form-control" name="status" id="fstatus" required
+                                data-parsley-trigger="keyup focusout">
+                                <option value="">-- Select Option --</option>
+                                @foreach (config('googledrivemedia.enable_disable') as $status)
+                                    @php
+                                        $selected = old('status', @$credential->status) == $status['value'] ? 'selected' : '';
+                                    @endphp
+                                    <option value="{{$status['value']}}" {{ $selected }}>{{ $status['name'] }}</option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('status'))
+                                <span class="help-block">{{ $errors->first('status') }}</span>
+                            @endif
+                        </div>
+
+                        <div class="form-group {{ $errors->first('pin') ? 'has-error' : '' }}">
+                            <label for="fpin">PIN <span class="text-danger">*</span></label>
+                            <input type="pin" class="form-control" id="fpin" placeholder="PIN"
+                                name="pin" value="{{ old('pin', @$credential->pin) }}" required
+                                data-parsley-trigger="keyup focusout">
+                            @if ($errors->has('pin'))
+                                <span class="help-block">{{ $errors->first('pin') }}</span>
+                            @endif
+                        </div>
+
                         <div style="margin-top: 25px">
                             <div class="box box-warning">
                                 <div class="box-header with-border">

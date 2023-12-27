@@ -14,6 +14,8 @@ class Credential extends Model
     protected $fillable = [
         'customer_id',
         'path',
+        'status',
+        'pin',
         'created_by_id',
         'updated_by_id'
     ];

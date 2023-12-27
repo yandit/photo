@@ -11,6 +11,8 @@ class Disk extends Model
 
     protected $fillable = [
         'client_id',
+        'email',
+        'password',
         'client_secret',
         'refresh_token',
         'disk_name',

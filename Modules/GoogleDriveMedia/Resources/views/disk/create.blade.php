@@ -27,6 +27,26 @@
                     
                     <div class="box-body">
 
+                        <div class="form-group {{ $errors->first('email') ? 'has-error' : '' }}">
+                            <label for="femail">Email <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="femail" placeholder="Eamil"
+                                name="email" value="{{ old('email') }}" required
+                                data-parsley-trigger="keyup focusout">
+                            @if ($errors->has('email'))
+                                <span class="help-block">{{ $errors->first('email') }}</span>
+                            @endif
+                        </div>
+
+                        <div class="form-group {{ $errors->first('password') ? 'has-error' : '' }}">
+                            <label for="fpassword">Password <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control" id="fpassword" placeholder="Password"
+                                name="password" value="{{ old('password') }}" required
+                                data-parsley-trigger="keyup focusout">
+                            @if ($errors->has('password'))
+                                <span class="help-block">{{ $errors->first('password') }}</span>
+                            @endif
+                        </div>
+
                         <div class="form-group {{ $errors->first('disk_name') ? 'has-error' : '' }}">
                             <label for="fdisk_name">Disk Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="fdisk_name" placeholder="Disk Name"
@@ -112,5 +132,23 @@
 
 @section('script')
     @parent
+    <script>
+        $(document).ready(function(){
+            handleShowHidePassowrd()
+        })
+
+        const handleShowHidePassowrd = function(){
+            $("#fpassword").click(function () {
+                var passwordField = $("#fpassword");
+                var passwordFieldType = passwordField.attr("type");
+
+                if (passwordFieldType === "password") {
+                    passwordField.attr("type", "text");
+                } else {
+                    passwordField.attr("type", "password");
+                }
+            });
+        }
+    </script>
     @include('googledrivemedia::partials.script')
 @endsection

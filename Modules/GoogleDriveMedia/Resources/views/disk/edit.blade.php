@@ -25,7 +25,27 @@
                     {!! Form::open(['route' => ['googledrivedisk.update', $disk->id], 'method' => 'PUT', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'formGoogleDriveMedia']) !!}
                     <div class="box-body">
 
-                    <div class="form-group {{ $errors->first('disk_name') ? 'has-error' : '' }}">
+                        <div class="form-group {{ $errors->first('email') ? 'has-error' : '' }}">
+                            <label for="femail">Email <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="femail" placeholder="Eamil"
+                                name="email" value="{{ old('email', @$disk->email) }}" required
+                                data-parsley-trigger="keyup focusout">
+                            @if ($errors->has('email'))
+                                <span class="help-block">{{ $errors->first('email') }}</span>
+                            @endif
+                        </div>
+
+                        <div class="form-group {{ $errors->first('password') ? 'has-error' : '' }}">
+                            <label for="fpassword">Password <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control" id="fpassword" placeholder="Password"
+                                name="password" value="{{ old('password', @$disk->password) }}" required
+                                data-parsley-trigger="keyup focusout">
+                            @if ($errors->has('password'))
+                                <span class="help-block">{{ $errors->first('password') }}</span>
+                            @endif
+                        </div>
+
+                        <div class="form-group {{ $errors->first('disk_name') ? 'has-error' : '' }}">
                             <label for="fdisk_name">Disk Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="fdisk_name" placeholder="Disk Name"
                                 name="disk_name" value="{{ old('disk_name', $disk->disk_name) }}" required
@@ -121,63 +141,20 @@
 
     <script>
         $(document).ready(function(){
-            handleAddRow()
-            handleDeleteRow()
-            handleIsActive()
+            handleShowHidePassowrd()
         })
 
-        const handleIsActive = function(){
-            $(document).on('change', '.is_active', function () {
-                $('.is_active').not(this).prop('checked', false);
-                const input_is_active = $(this).siblings('[name="is_active[]"]')
-                input_is_active.val(1)
-                $('input[name="is_active[]"]').not(input_is_active).val(0);
+        const handleShowHidePassowrd = function(){
+            $("#fpassword").click(function () {
+                var passwordField = $("#fpassword");
+                var passwordFieldType = passwordField.attr("type");
+
+                if (passwordFieldType === "password") {
+                    passwordField.attr("type", "text");
+                } else {
+                    passwordField.attr("type", "password");
+                }
             });
-        }
-
-        const handleAddRow = function(){
-            $('#add-row').click(function(){
-                const templates = `
-                    <tr>
-                        <td class="hidden id">
-                            <input type="text" name="id[]">
-                        </td>
-                        <td>
-                            <input type="text" name="disk_name[]" class="form-control" placeholder="Disk Name">
-                        </td>
-                        <td>
-                            <input type="text" name="client_id[]" class="form-control" placeholder="Client Id">
-                        </td>
-                        <td>
-                            <input type="text" name="client_secret[]" class="form-control" placeholder="Client Secret">
-                        </td>
-                        <td>
-                            <input type="text" name="refresh_token[]" class="form-control" placeholder="Refresh Token">
-                        </td>
-                        <td>
-                            <input type="checkbox" class="is_active">
-                            <input type="hidden" name="is_active[]" value="0">
-                        </td>
-                        <td>
-                            <a href="javascript:void(0)" class="btn btn-sm btn-warning btn-delete-row">
-                                <div class="hidden">
-                                    <input type="text" name="is_deleted[]" value="false">
-                                </div>
-                                <i class="fa fa-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
-                `
-
-                $('#table-credential-details').find('tbody').append(templates)
-            })
-        }
-
-        const handleDeleteRow = function(){
-            $(document).on('click', '.btn-delete-row', function(){
-                $(this).find('[name="is_deleted[]"]').val(true)
-                $(this).closest('tr').hide()
-            })
         }
     </script>
 @endsection
