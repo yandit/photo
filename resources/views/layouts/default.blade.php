@@ -15,5 +15,6 @@
     </div>
     <!-- ./wrapper -->
 
+    @include('partials.scripts')
 </body>
 </html>

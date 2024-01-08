@@ -17,6 +17,7 @@ class CredentialRequest extends FormRequest
         $appends = [];
         return array_merge([            
             'path' => 'required|unique:credentials,path,'.$id,
+            'pin' => 'required|digits:6'
         ], $appends);
     }
 

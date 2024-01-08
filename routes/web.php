@@ -19,3 +19,4 @@ Route::get('/', function () {
 
 Route::get('/upload/{slug?}', 'App\Http\Controllers\UploadController@index')->name('upload.index');
 Route::post('/upload/{slug?}', 'App\Http\Controllers\UploadController@store')->name('upload.store');
+Route::post('/pin-check', 'App\Http\Controllers\UploadController@pin_check')->name('upload.pin_check');
