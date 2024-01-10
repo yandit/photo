@@ -5,6 +5,7 @@ namespace Modules\GoogleDriveMedia\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Schema;
 use Modules\GoogleDriveMedia\Entities\Disk;
 
 class GoogleDriveMediaServiceProvider extends ServiceProvider
@@ -69,7 +70,10 @@ class GoogleDriveMediaServiceProvider extends ServiceProvider
 
     protected function disks()
     {
-        $disks = Disk::all();
+        $disks = [];
+        if (Schema::hasTable('disks')){
+            $disks = Disk::all();
+        }
         return $disks;
     }
 
@@ -84,14 +88,16 @@ class GoogleDriveMediaServiceProvider extends ServiceProvider
 
         // register disk dari tabel disks
         $disks = $this->disks();
-        foreach ($disks as $key => $disk) {
-            Config::set("filesystems.disks.{$disk->disk_name}", [
-                'driver' => 'google',
-                'clientId' => $disk->client_id,
-                'clientSecret' => $disk->client_secret,
-                'refreshToken' => $disk->refresh_token,
-                'folder' => '',
-            ]);
+        if($disks){
+            foreach ($disks as $key => $disk) {
+                Config::set("filesystems.disks.{$disk->disk_name}", [
+                    'driver' => 'google',
+                    'clientId' => $disk->client_id,
+                    'clientSecret' => $disk->client_secret,
+                    'refreshToken' => $disk->refresh_token,
+                    'folder' => '',
+                ]);
+            }
         }
     }
 

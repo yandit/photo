@@ -10,7 +10,7 @@ use Modules\GoogleDriveMedia\Entities\Credential;
 
 class Customer extends Model
 {
-    use SoftDeletes;
+    
 
     protected $fillable = [
         'name',

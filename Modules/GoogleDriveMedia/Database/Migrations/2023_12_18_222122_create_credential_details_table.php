@@ -16,7 +16,7 @@ class CreateCredentialDetailsTable extends Migration
         Schema::create('credential_details', function (Blueprint $table) {
             $table->id();
             $table->integer('credential_id')->unsigned();
-            $table->integer('disk_id')->unsigned();
+            $table->foreignId('disk_id')->constrained('disks')->onDelete('restrict');
             $table->boolean('is_active');
             $table->timestamps();
         });

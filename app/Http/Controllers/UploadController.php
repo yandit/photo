@@ -26,12 +26,13 @@ class UploadController extends Controller
     public function index(Request $request, $slug=null)
     {
         $uploads = Upload::get();
-        
-        echo session()->getId();
 
         $session_whitelist = false;
 
         $session_id = session()->getId();
+
+        $all_files = [];
+        
         if ($slug){
             $customer = Customer::where('slug', $slug)->first();
             $credential = $customer->credential;

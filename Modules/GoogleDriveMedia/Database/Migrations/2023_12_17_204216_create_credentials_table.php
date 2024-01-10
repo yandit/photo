@@ -16,7 +16,7 @@ class CreateCredentialsTable extends Migration
         Schema::create('credentials', function (Blueprint $table) {
             $table->id();
 
-            $table->integer('customer_id')->unsigned();
+            $table->foreignId('customer_id')->constrained()->onDelete('restrict');
             $table->string('path')->unique();
             $table->string('status')->default('enable');
             $table->string('pin');
