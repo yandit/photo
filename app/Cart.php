@@ -5,14 +5,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Upload extends Model
+class Cart extends Model
 {
-    use HasFactory;
-    
     protected $guarded = [];
 
-    public function cart()
+    public function uploads()
     {
-        return $this->belongsTo(Cart::class);
+        return $this->hasMany(Upload::class);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Upload;
+use App\Cart;
 use Illuminate\Http\Request;
 
 use Storage;
@@ -25,11 +26,16 @@ class UploadController extends Controller
      */
     public function index(Request $request, $slug=null)
     {
-        $uploads = Upload::get();
+        $session_id = session()->getId();
+
+        $uploads = Upload::whereHas('cart', function ($query) use ($session_id) {
+            $query->where([
+                'session_id'=> $session_id,
+                'status'=> 'on-progress'
+            ]);
+        })->get();
 
         $session_whitelist = false;
-
-        $session_id = session()->getId();
 
         $all_files = [];
         
@@ -138,10 +144,15 @@ class UploadController extends Controller
      */
     public function store(Request $request, $slug=null)
     {
+        $cart = cart();
+
         $images  = $request->file('images');
         foreach($images as $image){
             $result = CloudinaryStorage::upload($image->getRealPath(), $image->getClientOriginalName()); 
-            Upload::create(['image' => $result]);
+            Upload::create([
+                'cart_id'=> $cart->id,
+                'image' => $result
+            ]);
         }
         return redirect()->route('upload.index', ['slug'=> $slug])->withSuccess('berhasil upload');
     }
