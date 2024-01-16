@@ -6,7 +6,9 @@
     <input type="file" name="images[]" accept="image/*" multiple>
     <button>Upload</button>
     @foreach ($uploads as $upload)
-    <img width="100px" src="{{ $upload->image }}" alt="">
+    <div style="width: 200px;">
+        <img width="200px" src="{{ $upload->image }}" alt="">
+    </div>
     @endforeach
     <br>
     ==============================

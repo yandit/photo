@@ -6,7 +6,14 @@
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
+<link rel="stylesheet" type="text/css" href="{{ asset('fe/css/bootstrap.min.css') }}">
+
+<link rel="stylesheet" type="text/css" href="{{ asset('fe/css/font-awesome.css') }}">
+
+<link rel="stylesheet" href="{{ asset('fe/css/templatemo-lava.css') }}">
+
+<link rel="stylesheet" href="{{ asset('fe/css/owl-carousel.css') }}">
+
 <!-- Google Font -->
-<link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
 @show
