@@ -1,4 +1,8 @@
 @extends('layouts.default')
+@section('metadata')
+@parent
+<link rel="stylesheet" href="{{ asset('fe/css/cropper.min.css') }}">
+@endsection
 
 @section('content')
 <form action="{{ route('upload.store', ['slug'=> $slug]) }}" method="post" enctype="multipart/form-data">
@@ -6,8 +10,8 @@
     <input type="file" name="images[]" accept="image/*" multiple>
     <button>Upload</button>
     @foreach ($uploads as $upload)
-    <div style="width: 200px;">
-        <img width="200px" src="{{ $upload->image }}" alt="">
+    <div style="width: 300px; height: 300px">
+        <img style="display: block; max-width: 100%" id="image" src="{{ $upload->image }}" alt="">
     </div>
     @endforeach
     <br>
@@ -27,12 +31,45 @@
 
 @section('script')
 @parent
+
+<!-- https://github.com/fengyuanchen/cropperjs/blob/main/README.md -->
+<script src="{{ asset('fe/js/cropper.min.js') }}"></script>
+
 <script>
-    const slug = "{{$slug}}"
-    const session_whitelist = "{{$session_whitelist}}"
-    console.log(BASE_URL)
-    if(slug && !session_whitelist){
-        handlePromt()
+    $(document).ready(function(){
+        const slug = "{{$slug}}"
+        const session_whitelist = "{{$session_whitelist}}"
+        if(slug && !session_whitelist){
+            handlePromt()
+        }
+
+        handleCrop()
+    })
+
+    function handleCrop(){
+        const image = document.getElementById('image');
+        const cropper = new Cropper(image, {
+            // aspectRatio: 1 / 1,
+            autoCropArea: 1,
+            guides: false,
+            center: false,
+            rotatable: false,
+            cropBoxMovable: false,
+            cropBoxResizable: false,
+            dragMode: 'move',
+            viewMode: 3,
+            // minCropBoxWidth: 10,
+            crop(event) {
+                console.log('x '+event.detail.x);
+                console.log('y '+event.detail.y);
+                console.log('w '+event.detail.width);
+                console.log('h '+event.detail.height);
+                console.log(event.detail.rotate);
+                console.log(event.detail.scaleX);
+                console.log(event.detail.scaleY);
+                console.log('========================')
+            },
+        });
     }
 
     function handlePromt(){
