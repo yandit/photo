@@ -13,6 +13,8 @@
         "cloudinary-labs/cloudinary-laravel": "^2.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "intervention/image": "^2.5",
+        "intervention/imagecache": "^2.5",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",

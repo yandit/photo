@@ -10,8 +10,8 @@
     <input type="file" name="images[]" accept="image/*" multiple>
     <button>Upload</button>
     @foreach ($uploads as $upload)
-    <div style="width: 300px; height: 300px">
-        <img style="display: block; max-width: 100%" id="image" src="{{ $upload->image }}" alt="">
+    <div style="width: 250px; height: 250px">
+        <img style="display: block; max-width: 100%" id="image" src="{{ route('getimage.crop', ['x'=> $upload->x ? $upload->x : 'null', 'y' => $upload->y ? $upload->y : 'null', 'w'=> $upload->width, 'h'=> $upload->height, 'path' => $upload->image]) }}" alt="">
     </div>
     @endforeach
     <br>
@@ -27,6 +27,36 @@
         @endforeach
     </ul>
 </form>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+  Open Modal
+</button>
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Modal Title</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <p>This is the content of the modal. You can add any HTML content here.</p>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('script')
@@ -36,14 +66,15 @@
 <script src="{{ asset('fe/js/cropper.min.js') }}"></script>
 
 <script>
+    const slug = "{{$slug}}"
     $(document).ready(function(){
-        const slug = "{{$slug}}"
+        
         const session_whitelist = "{{$session_whitelist}}"
         if(slug && !session_whitelist){
             handlePromt()
         }
 
-        handleCrop()
+        // handleCrop()
     })
 
     function handleCrop(){

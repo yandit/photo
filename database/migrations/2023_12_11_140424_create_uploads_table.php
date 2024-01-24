@@ -16,6 +16,10 @@ class CreateUploadsTable extends Migration
         Schema::create('uploads', function (Blueprint $table) {
             $table->id();
             $table->string('image');
+            $table->string('x')->nullable();
+			$table->string('y')->nullable();
+			$table->string('width')->nullable();
+            $table->string('height')->nullable();
             $table->unsignedBigInteger('cart_id')->nullable();
             $table->foreign('cart_id')->references('id')->on('carts')->onDelete('cascade');
             $table->timestamps();

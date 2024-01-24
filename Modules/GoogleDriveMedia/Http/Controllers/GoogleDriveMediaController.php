@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Storage;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
+use Image;
 
 class GoogleDriveMediaController extends Controller
 {
@@ -14,11 +16,13 @@ class GoogleDriveMediaController extends Controller
     {
         $path = $request->query('path');
         $disk_name = $request->query('disk_name');
-        $file = Storage::disk($disk_name)->get($path);
-        
-        return new Response($file, 200, [
-            'Content-Type' => 'image/jpeg', // Ganti tipe mime sesuai dengan tipe gambar yang diinginkan
-            'Content-Disposition' => 'inline',
-        ]);
+
+        return Cache::remember($path, 1000, function() use($disk_name, $path){
+            $file = Storage::disk($disk_name)->get($path);    
+            return new Response($file, 200, [
+                'Content-Type' => 'image/jpeg',
+                'Content-Disposition' => 'inline',
+            ]);
+        });
     }
 }

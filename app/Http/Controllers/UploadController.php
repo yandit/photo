@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Upload;
 use App\Cart;
 use Illuminate\Http\Request;
+use Image;
 
 use Storage;
 use Illuminate\Http\Response;
@@ -148,10 +149,28 @@ class UploadController extends Controller
 
         $images  = $request->file('images');
         foreach($images as $image){
-            $result = CloudinaryStorage::upload($image->getRealPath(), $image->getClientOriginalName()); 
+            // $result = CloudinaryStorage::upload($image->getRealPath(), $image->getClientOriginalName()); 
+
+            $make = Image::make($image);
+            $make->orientate();
+            $height = $make->height();
+            $width = $make->width();
+
+            $square = ($width > $height) ? $height : $width;
+
+            $imageName = time().'.'.$image->extension();
+
+            $dateFolder = now()->format('Y-m-d');
+
+            // Simpan gambar ke penyimpanan lokal menggunakan Storage
+            $path = "public/uploads/$cart->session_id/$dateFolder";
+            $upload = \Storage::putFile($path, $image);
+            $imageUrl = \Storage::url($upload);
             Upload::create([
                 'cart_id'=> $cart->id,
-                'image' => $result
+                'image' => trim($imageUrl, '/'),
+                'width' => $square,
+                'height' => $square
             ]);
         }
         return redirect()->route('upload.index', ['slug'=> $slug])->withSuccess('berhasil upload');
