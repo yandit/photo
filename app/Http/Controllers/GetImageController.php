@@ -7,12 +7,14 @@ use Image;
 
 class GetImageController extends Controller
 {
-    public function crop($x, $y, $w, $h, $path)
+    public function crop($source, $x, $y, $w, $h, $path)
     {
         $x = $x == 'null' ? null : $x;
         $y = $y == 'null' ? null : $y;
 
-        $img = Image::cache(function($image) use($x, $y, $w, $h, $path) {
+        $img = Image::cache(function($image) use($x, $y, $w, $h, $path, $source) {
+            $path = $this->handlePath($source, $path);
+            
             $image->make($path)
                 ->orientate()
                 ->crop($w, $h, $x, $y)
@@ -21,5 +23,15 @@ class GetImageController extends Controller
         }, 1000, true);
 
         return $img->response();
+    }
+
+    protected function handlePath($source, $path)
+    {
+        if($source == 'local'){
+            $path = \Storage::url($path);
+            $path = trim($path, '/');
+        }
+
+        return $path;
     }
 }

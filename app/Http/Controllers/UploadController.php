@@ -164,9 +164,10 @@ class UploadController extends Controller
 
             // Simpan gambar ke penyimpanan lokal menggunakan Storage
             $path = "public/uploads/$cart->session_id/$dateFolder";
-            $upload = \Storage::putFile($path, $image);
-            $imageUrl = \Storage::url($upload);
+            $imageUrl = \Storage::putFile($path, $image);
+            // $imageUrl = \Storage::url($upload);
             Upload::create([
+                'source'=> 'local',
                 'cart_id'=> $cart->id,
                 'image' => trim($imageUrl, '/'),
                 'width' => $square,
@@ -218,7 +219,13 @@ class UploadController extends Controller
      */
     public function destroy(Upload $upload)
     {
-        //
+        $filePath = $upload->image;
+        $upload->delete();
+        if (\Storage::exists($filePath)) {
+            \Storage::delete($filePath);
+        }
+
+        return redirect()->back();
     }
 
     public function getImage(Request $request)
