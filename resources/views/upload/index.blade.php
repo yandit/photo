@@ -64,7 +64,7 @@
             <!-- Modal Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" id="crop-btn" class="btn btn-primary">Save changes</button>
             </div>
 
         </div>
@@ -81,6 +81,8 @@
 
 <script>
     const slug = "{{$slug}}"
+    let cropper;
+
     $(document).ready(function(){
         
         const session_whitelist = "{{$session_whitelist}}"
@@ -88,13 +90,14 @@
             handlePromt()
         }
 
+        handleInitCrop()
         handleCrop()
     })
 
-    function handleCrop(){
+    function handleInitCrop(){
         $(document).on('click', '.btn-crop', function(){
             const image = $(this).data('image')
-            // console.log(image)
+            
             const x = $(this).data('x')
             const y = $(this).data('y')
             const w = $(this).data('w')
@@ -109,9 +112,8 @@
             `)
 
             let cropped_image = document.getElementById('cropped-image');
-            console.log(cropped_image)
-            
-            let cropper = new Cropper(cropped_image, {
+
+            cropper = new Cropper(cropped_image, {
                 // aspectRatio: 1 / 1,
                 autoCropArea: 1,
                 guides: false,
@@ -122,19 +124,17 @@
                 dragMode: 'move',
                 viewMode: 3,
                 // minCropBoxWidth: 10,
-                crop(event) {
-                    console.log('x '+event.detail.x);
-                    console.log('y '+event.detail.y);
-                    console.log('w '+event.detail.width);
-                    console.log('h '+event.detail.height);
-                    console.log(event.detail.rotate);
-                    console.log(event.detail.scaleX);
-                    console.log(event.detail.scaleY);
-                    console.log('========================')
-                }
             });
 
+            
+
             modal.modal('show')
+        })
+    }
+
+    function handleCrop(){
+        $(document).on('click', '#crop-btn', function(){
+            console.log('halo', cropper.getData())
         })
     }
 
