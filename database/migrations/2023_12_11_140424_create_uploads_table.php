@@ -17,10 +17,21 @@ class CreateUploadsTable extends Migration
             $table->id();
             $table->string('source');
             $table->string('image');
+
+            // intervention image
             $table->string('x')->nullable();
 			$table->string('y')->nullable();
 			$table->string('width')->nullable();
             $table->string('height')->nullable();
+            // ===================
+
+            // canvas cropper js
+            $table->string('cleft')->nullable();
+			$table->string('ctop')->nullable();
+			$table->string('cwidth')->nullable();
+            $table->string('cheight')->nullable();
+            // ===================
+
             $table->unsignedBigInteger('cart_id')->nullable();
             $table->foreign('cart_id')->references('id')->on('carts')->onDelete('cascade');
             $table->timestamps();

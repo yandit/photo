@@ -208,6 +208,30 @@ class UploadController extends Controller
      */
     public function update(Request $request, Upload $upload)
     {
+        $x = $request->input('x');
+        $y = $request->input('y');
+        $w = $request->input('w');
+        $h = $request->input('h');
+
+        $cleft = $request->input('cleft');
+        $ctop = $request->input('ctop');
+        $cwidth = $request->input('cwidth');
+        $cheight = $request->input('cheight');
+
+        $upload->update([
+            'x'=> $x,
+            'y'=> $y,
+            'width'=> $w,
+            'height'=> $h,
+            'cleft'=> $cleft,
+            'ctop'=> $ctop,
+            'cwidth'=> $cwidth,
+            'cheight'=> $cheight,
+        ]);
+
+        return response()->json([
+            'message' => 'Resource updated successfully'
+        ]);
         //
     }
 

@@ -12,12 +12,18 @@
         <button>Upload</button>
     </form>
     @foreach ($uploads as $upload)
-    <div style="width: 250px; height: 250px; position: relative" class="mb-2">
+    <div style="width: 250px; height: 250px; position: relative" data-id="{{ $upload->id }}" class="mb-2 img-list-container">
 
-        <img style="max-width: 100%" src="{{ route('getimage.crop', ['x'=> $upload->x ? $upload->x : 'null', 'y' => $upload->y ? $upload->y : 'null', 'w'=> $upload->width, 'h'=> $upload->height, 'path' => $upload->image, 'source' => $upload->source]) }}" alt="">
+        <img style="max-width: 100%" class="img-lists" src="{{ route('getimage.crop', ['x'=> $upload->x ? $upload->x : 'null', 'y' => $upload->y ? $upload->y : 'null', 'w'=> $upload->width, 'h'=> $upload->height, 'path' => $upload->image, 'source' => $upload->source]) }}" alt="">
 
         <div style="position: absolute; bottom: 0; left: 0; right: 0; display: flex;" class="text-center">
-            <div class="btn-crop" data-image="{{ Storage::url($upload->image) }}" data-x="{{ $upload->x }}" data-y="{{ $upload->y }}" data-w="{{ $upload->width }}" data-h="{{ $upload->height }}" style="flex: 1; background: rgba(255, 0, 0, 0.5);">
+            <div class="btn-crop" data-image="{{ $upload->source == 'local' ? Storage::url($upload->image) : $upload->image }}" 
+                data-cleft="{{ $upload->cleft }}" 
+                data-ctop="{{ $upload->ctop }}" 
+                data-cwidth="{{ $upload->cwidth }}" 
+                data-cheight="{{ $upload->cheight }}" 
+                style="flex: 1; background: rgba(255, 0, 0, 0.5);"
+            >
                 <a href="javascript:void(0)">crop</i></a>
             </div>
             <div style="flex: 1; background: rgba(255, 0, 0, 0.5);">
@@ -64,7 +70,7 @@
             <!-- Modal Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="crop-btn" class="btn btn-primary">Save changes</button>
+                <button type="button" id="btn-crop-submit" class="btn btn-primary">Save changes</button>
             </div>
 
         </div>
@@ -82,6 +88,8 @@
 <script>
     const slug = "{{$slug}}"
     let cropper;
+    let btn_crop;
+    const modal = $('#modal-crop')
 
     $(document).ready(function(){
         
@@ -96,14 +104,13 @@
 
     function handleInitCrop(){
         $(document).on('click', '.btn-crop', function(){
+            btn_crop = $(this)
             const image = $(this).data('image')
             
-            const x = $(this).data('x')
-            const y = $(this).data('y')
-            const w = $(this).data('w')
-            const h = $(this).data('h')
-
-            const modal = $('#modal-crop')
+            const cleft = $(this).data('cleft')
+            const ctop = $(this).data('ctop')
+            const cwidth = $(this).data('cwidth')
+            const cheight = $(this).data('cheight')
             
             modal.find('.modal-body').html(`
                 <div style="width: 250px; height: 250px;" class="mx-auto">
@@ -112,6 +119,21 @@
             `)
 
             let cropped_image = document.getElementById('cropped-image');
+
+            let canvas_data;
+		    let cropbox_data;
+
+            cropped_image.addEventListener('ready', function(){
+                canvas_data = cropper.getCanvasData();
+                cropbox_data = cropper.getCropBoxData();
+                
+                canvas_data.left = (cleft) ? parseFloat(cleft) : '';
+                canvas_data.top = (ctop) ? parseFloat(ctop) : '';
+                canvas_data.width = (cwidth) ? parseFloat(cwidth) : '';
+                canvas_data.height = (cheight) ? parseFloat(cheight) : '';
+
+                cropper.setCropBoxData(cropbox_data).setCanvasData(canvas_data);
+            })
 
             cropper = new Cropper(cropped_image, {
                 // aspectRatio: 1 / 1,
@@ -133,8 +155,44 @@
     }
 
     function handleCrop(){
-        $(document).on('click', '#crop-btn', function(){
-            console.log('halo', cropper.getData())
+        $(document).on('click', '#btn-crop-submit', function(){
+            const cropped_data = cropper.getData()
+            const c_data = cropper.getCanvasData();
+
+            const x = cropped_data.x
+            const y = cropped_data.y
+            const width = cropped_data.width
+            const height = cropped_data.height
+
+            btn_crop.data('cleft', c_data.left)
+            btn_crop.data('ctop', c_data.top)
+            btn_crop.data('cwidth', c_data.width)
+            btn_crop.data('cheight', c_data.height)
+
+            const cropped_image = cropper.getCroppedCanvas({width: 250, height: 250}).toDataURL('image/jpeg')
+            const img_list_container = btn_crop.closest('.img-list-container')
+
+            const upload_id = img_list_container.data('id')
+            img_list_container.find('img').attr('src', cropped_image)
+            
+            $.ajax({
+                url: `/upload/edit/${upload_id}`,
+                type: 'PUT',
+                data: {
+                    'x': x,
+                    'y': y,
+                    'w': width,
+                    'h': height,
+                    'cwidth': c_data.width,
+                    'cheight': c_data.height,
+                    'cleft': c_data.left,
+                    'ctop': c_data.top,
+                },
+                success: function(res){
+                    modal.modal('hide')
+                }
+            })
+
         })
     }
 
