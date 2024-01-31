@@ -173,7 +173,6 @@
             const img_list_container = btn_crop.closest('.img-list-container')
 
             const upload_id = img_list_container.data('id')
-            img_list_container.find('img').attr('src', cropped_image)
             
             $.ajax({
                 url: `/upload/edit/${upload_id}`,
@@ -189,7 +188,13 @@
                     'ctop': c_data.top,
                 },
                 success: function(res){
+                    if (!res.success){
+                        alert(res.message)
+                        return false
+                    }
+                    
                     modal.modal('hide')
+                    img_list_container.find('img').attr('src', cropped_image)
                 }
             })
 

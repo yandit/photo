@@ -208,32 +208,71 @@ class UploadController extends Controller
      */
     public function update(Request $request, Upload $upload)
     {
-        $x = $request->input('x');
-        $y = $request->input('y');
-        $w = $request->input('w');
-        $h = $request->input('h');
+        $success = true;
+        $errorMessage = '';
 
-        $cleft = $request->input('cleft');
-        $ctop = $request->input('ctop');
-        $cwidth = $request->input('cwidth');
-        $cheight = $request->input('cheight');
+        try {
+            $isAllowed = $this->isAllowedToManipulatedImage($upload);
 
-        $upload->update([
-            'x'=> $x,
-            'y'=> $y,
-            'width'=> $w,
-            'height'=> $h,
-            'cleft'=> $cleft,
-            'ctop'=> $ctop,
-            'cwidth'=> $cwidth,
-            'cheight'=> $cheight,
-        ]);
+            if(!$isAllowed){
+                throw new \Exception('Session IDs do not match');
+            }
+
+            $x = $request->input('x');
+            $y = $request->input('y');
+            $w = $request->input('w');
+            $h = $request->input('h');
+
+            $cleft = $request->input('cleft');
+            $ctop = $request->input('ctop');
+            $cwidth = $request->input('cwidth');
+            $cheight = $request->input('cheight');
+
+            $upload->update([
+                'x'=> $x,
+                'y'=> $y,
+                'width'=> $w,
+                'height'=> $h,
+                'cleft'=> $cleft,
+                'ctop'=> $ctop,
+                'cwidth'=> $cwidth,
+                'cheight'=> $cheight,
+            ]);
+
+            $errorMessage = 'Resource updated successfully';
+
+        } catch (\Exception $e) {
+            // Catch the exception and set $success to false
+            $success = false;
+            $errorMessage = $e->getMessage();
+        }
 
         return response()->json([
-            'message' => 'Resource updated successfully'
+            'success' => $success,
+            'message' => $errorMessage
         ]);
-        //
     }
+
+    /**
+     * checking whether or not the user is allowed to manipulated the image.
+     * by comparing the cart session_id and the current user session_id
+     *
+     * @param  \App\Upload  $upload
+     * @return boolean
+     */
+    public function isAllowedToManipulatedImage($upload)
+    {
+        $isAllowed = true;
+        $uploadCartSessionId = $upload->cart->session_id;
+        $currentSessionId = session()->getId();
+
+        if ($uploadCartSessionId != $currentSessionId) {
+            $isAllowed = false;
+        }
+
+        return $isAllowed;
+    }
+
 
     /**
      * Remove the specified resource from storage.
@@ -243,10 +282,22 @@ class UploadController extends Controller
      */
     public function destroy(Upload $upload)
     {
-        $filePath = $upload->image;
-        $upload->delete();
-        if (\Storage::exists($filePath)) {
-            \Storage::delete($filePath);
+
+        try {
+            $isAllowed = $this->isAllowedToManipulatedImage($upload);
+
+            if(!$isAllowed){
+                throw new \Exception('Session IDs do not match');
+            }
+
+            $filePath = $upload->image;
+            $upload->delete();
+            if (\Storage::exists($filePath)) {
+                \Storage::delete($filePath);
+            }
+
+        } catch (\Exception $e) {
+            $errorMessage = $e->getMessage();
         }
 
         return redirect()->back();
