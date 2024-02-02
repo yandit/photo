@@ -2,6 +2,28 @@
 @section('metadata')
 @parent
 <link rel="stylesheet" href="{{ asset('fe/css/cropper.min.css') }}">
+<style>
+    .box-container {
+        position: relative;
+        width: 296px; 
+        height: 296px;
+    }
+    .box {
+        /* padding: 20px; */
+        background-color: #fff;
+        border: 15px solid transparent;
+        border-image: 
+            linear-gradient(45deg, #111, #111) 1;
+        border-image-slice: 1;
+        border-image-width: 15px; 
+        border-image-outset: 0px; 
+        border-radius: 10px;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        font-size: 18px;
+        box-shadow: 5px 5px 40px rgba(0, 0, 0, 0.5);
+    }
+</style>
 @endsection
 
 @section('content')
@@ -12,30 +34,38 @@
         <button>Upload</button>
     </form>
     @foreach ($uploads as $upload)
-    <div style="width: 250px; height: 250px; position: relative" data-id="{{ $upload->id }}" class="mb-2 img-list-container">
+    <div class="box-container">
 
-        <img style="max-width: 100%" class="img-lists" src="{{ route('getimage.crop', ['x'=> $upload->x ? $upload->x : 'null', 'y' => $upload->y ? $upload->y : 'null', 'w'=> $upload->width, 'h'=> $upload->height, 'path' => $upload->image, 'source' => $upload->source]) }}" alt="">
+        <div style="position: absolute; left: 288px; top: 0px; width: 8.84211px; height: 292px; clip-path: polygon(0px 0px, 100% 3.17101%, 100% 100%, 0px 95.999%); background: rgb(88, 88, 88);"></div>
+        <div style="position: absolute; left: 8px; top: 280px; width: 289px; height: 11.7895px; clip-path: polygon(0px 0px, 96.9027% 0px, 100% 100%, 2.39726% 100%); background: rgb(66, 66, 66);"></div>
+        
+        <div style="position: relative;" data-id="{{ $upload->id }}" class="m-2 img-list-container box">
+            
 
-        <div style="position: absolute; bottom: 0; left: 0; right: 0; display: flex;" class="text-center">
-            <div class="btn-crop" data-image="{{ $upload->source == 'local' ? Storage::url($upload->image) : $upload->image }}" 
-                data-cleft="{{ $upload->cleft }}" 
-                data-ctop="{{ $upload->ctop }}" 
-                data-cwidth="{{ $upload->cwidth }}" 
-                data-cheight="{{ $upload->cheight }}" 
-                style="flex: 1; background: rgba(255, 0, 0, 0.5);"
-            >
-                <a href="javascript:void(0)">crop</i></a>
-            </div>
-            <div style="flex: 1; background: rgba(255, 0, 0, 0.5);">
-                <form action="{{ route('upload.destroy', ['upload' => $upload->id]) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
+            <img style="max-width: 100%" class="img-lists" src="{{ route('getimage.crop', ['x'=> $upload->x ? $upload->x : 'null', 'y' => $upload->y ? $upload->y : 'null', 'w'=> $upload->width, 'h'=> $upload->height, 'path' => $upload->image, 'source' => $upload->source]) }}" alt="">
 
-                    <button type="submit">Delete</button>
-                </form>
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; display: flex;" class="text-center">
+                <div class="btn-crop" data-image="{{ $upload->source == 'local' ? Storage::url($upload->image) : $upload->image }}" 
+                    data-cleft="{{ $upload->cleft }}" 
+                    data-ctop="{{ $upload->ctop }}" 
+                    data-cwidth="{{ $upload->cwidth }}" 
+                    data-cheight="{{ $upload->cheight }}" 
+                    style="flex: 1; background: rgba(255, 0, 0, 0.5);"
+                >
+                    <a href="javascript:void(0)">crop</i></a>
+                </div>
+                <div style="flex: 1; background: rgba(255, 0, 0, 0.5);">
+                    <form action="{{ route('upload.destroy', ['upload' => $upload->id]) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+    
     @endforeach
     <br>
     ==============================
