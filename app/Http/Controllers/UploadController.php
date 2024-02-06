@@ -17,6 +17,7 @@ use App\Http\Controllers\CloudinaryStorage;
 // use App\Upload;
 use Modules\Customer\Entities\Customer;
 use Modules\GoogleDriveMedia\Entities\SessionWhitelist;
+use Modules\Frames\Entities\StickableFrame;
 
 class UploadController extends Controller
 {
@@ -27,6 +28,11 @@ class UploadController extends Controller
      */
     public function index(Request $request, $slug=null)
     {
+        $cart = cart();
+
+        $selected_frame = $cart->frames_stickable;
+
+        $frames = StickableFrame::where('status', 'publish')->get();
         $session_id = session()->getId();
 
         $uploads = Upload::whereHas('cart', function ($query) use ($session_id) {
@@ -50,7 +56,7 @@ class UploadController extends Controller
             $all_files = $this->get_all_gdrive_files($slug, $credential);
         }
 
-        return view('upload.index', compact('uploads', 'all_files', 'slug', 'session_whitelist'));
+        return view('upload.index', compact('cart', 'frames', 'selected_frame', 'uploads', 'all_files', 'slug', 'session_whitelist'));
     }
 
     /**
@@ -249,7 +255,8 @@ class UploadController extends Controller
 
         return response()->json([
             'success' => $success,
-            'message' => $errorMessage
+            'message' => $errorMessage,
+            'upload'=> $upload
         ]);
     }
 

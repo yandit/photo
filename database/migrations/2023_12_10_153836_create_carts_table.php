@@ -16,6 +16,7 @@ class CreateCartsTable extends Migration
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
             $table->string('session_id');
+            $table->foreignId('frames_stickable_id')->constrained()->onDelete('restrict');
             $table->string('status')->default('on-progress');
             $table->timestamps();
         });

@@ -3,12 +3,12 @@
 @parent
 <link rel="stylesheet" href="{{ asset('fe/css/cropper.min.css') }}">
 <style>
-    .box-container {
+    .image-container {
         position: relative;
         width: 296px; 
         height: 296px;
     }
-    .box {
+    .classic-black-border {
         /* padding: 20px; */
         background-color: #fff;
         border: 15px solid transparent;
@@ -23,23 +23,93 @@
         font-size: 18px;
         box-shadow: 5px 5px 40px rgba(0, 0, 0, 0.5);
     }
+
+    .classic-black-border-right{
+        position: absolute; 
+        left: 288px; 
+        top: 0px; 
+        width: 8.84211px; 
+        height: 292px; 
+        clip-path: polygon(0px 0px, 100% 3.17101%, 100% 100%, 0px 95.999%); 
+        background: rgb(88, 88, 88);
+    }
+
+    .classic-black-border-bottom{
+        position: absolute; 
+        left: 8px; 
+        top: 280px; 
+        width: 289px; 
+        height: 11.7895px; 
+        clip-path: polygon(0px 0px, 96.9027% 0px, 100% 100%, 2.39726% 100%); 
+        background: rgb(66, 66, 66);
+    }
+
+
+    /* classic white */
+    .classic-white-border {
+        /* padding: 20px; */
+        background-color: #fff;
+        border: 15px solid transparent;
+        border-image: 
+            linear-gradient(45deg, #fff, #fff) 1;
+        border-image-slice: 1;
+        border-image-width: 15px; 
+        border-image-outset: 0px; 
+        border-radius: 10px;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        font-size: 18px;
+        box-shadow: 5px 5px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .classic-white-border-right{
+        position: absolute; 
+        left: 288px; 
+        top: 0px; 
+        width: 8.84211px; 
+        height: 292px; 
+        clip-path: polygon(0px 0px, 100% 3.17101%, 100% 100%, 0px 95.999%); 
+        background: rgb(160, 160, 160);
+    }
+
+    .classic-white-border-bottom{
+        position: absolute; 
+        left: 8px; 
+        top: 280px; 
+        width: 289px; 
+        height: 11.7895px; 
+        clip-path: polygon(0px 0px, 96.9027% 0px, 100% 100%, 2.39726% 100%); 
+        background: rgb(100, 100, 100);
+    }
+    /* end classic white */
 </style>
 @endsection
 
 @section('content')
 <div>
+    <ul>
+    @foreach ($frames as $frame)
+        <li>
+            <a href="javascript:void(0)" data-class="{{ $frame->class }}" class="frame-selection">
+                <img src="{{ Storage::url($frame->image) }}" style="width: 200px" alt="">
+                <br>
+                <span>{{$frame->title}}</span>
+            </a>
+        </li>
+    @endforeach
+    </ul>
     <form action="{{ route('upload.store', ['slug'=> $slug]) }}" method="post" enctype="multipart/form-data">
         @csrf
         <input type="file" name="images[]" accept="image/*" multiple>
         <button>Upload</button>
     </form>
     @foreach ($uploads as $upload)
-    <div class="box-container">
-
-        <div style="position: absolute; left: 288px; top: 0px; width: 8.84211px; height: 292px; clip-path: polygon(0px 0px, 100% 3.17101%, 100% 100%, 0px 95.999%); background: rgb(88, 88, 88);"></div>
-        <div style="position: absolute; left: 8px; top: 280px; width: 289px; height: 11.7895px; clip-path: polygon(0px 0px, 96.9027% 0px, 100% 100%, 2.39726% 100%); background: rgb(66, 66, 66);"></div>
-        
-        <div style="position: relative;" data-id="{{ $upload->id }}" class="m-2 img-list-container box">
+    <div class="image-container">
+        <div class="3d-border">
+            <div class="border-right {{$selected_frame->class}}-border-right"></div>
+            <div class="border-bottom {{$selected_frame->class}}-border-bottom"></div>
+        </div>
+        <div style="position: relative;" data-id="{{ $upload->id }}" class="m-2 img-list-container {{$selected_frame->class}}-border">
             
 
             <img style="max-width: 100%" class="img-lists" src="{{ route('getimage.crop', ['x'=> $upload->x ? $upload->x : 'null', 'y' => $upload->y ? $upload->y : 'null', 'w'=> $upload->width, 'h'=> $upload->height, 'path' => $upload->image, 'source' => $upload->source]) }}" alt="">
@@ -127,10 +197,22 @@
         if(slug && !session_whitelist){
             handlePromt()
         }
-
+        handleFrameSelection()
         handleInitCrop()
         handleCrop()
     })
+
+    function handleFrameSelection(){
+        $('.frame-selection').on('click', function(){
+            const border_class = $(this).data('class')
+            $('.image-container').each(function(){
+                $(this).find('.3d-border .border-right').attr('class', `border-right ${border_class}-border-right`)
+                $(this).find('.3d-border .border-bottom').attr('class', `border-bottom ${border_class}-border-bottom`)
+
+                $(this).find('.img-list-container').attr('class', `m-2 img-list-container ${border_class}-border`)
+            })
+        });
+    }
 
     function handleInitCrop(){
         $(document).on('click', '.btn-crop', function(){
