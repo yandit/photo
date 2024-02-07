@@ -84,14 +84,130 @@
         background: rgb(100, 100, 100);
     }
     /* end classic white */
+
+    /* matting white */
+    .matting-white-border {
+        padding: 20px;
+        background-color: #fff;
+        border: 15px solid transparent;
+        border-image: 
+            linear-gradient(45deg, #fff, #fff) 1;
+        border-image-slice: 1;
+        border-image-width: 15px; 
+        border-image-outset: 0px; 
+        box-shadow:
+            5px 5px 40px rgba(0, 0, 0, 0.5),
+            inset 0 0 10px rgba(0, 0, 0, 0.5);
+        font-family: Arial, sans-serif;
+        text-align: center;
+        font-size: 18px;
+    }
+
+    .matting-white-border-right{
+        position: absolute; 
+        left: 288px; 
+        top: 0px; 
+        width: 8.84211px; 
+        height: 292px; 
+        clip-path: polygon(0px 0px, 100% 3.17101%, 100% 100%, 0px 95.999%); 
+        background: rgb(160, 160, 160);
+    }
+
+    .matting-white-border-bottom{
+        position: absolute; 
+        left: 8px; 
+        top: 280px; 
+        width: 289px; 
+        height: 11.7895px; 
+        clip-path: polygon(0px 0px, 96.9027% 0px, 100% 100%, 2.39726% 100%); 
+        background: rgb(100, 100, 100);
+    }
+    /* end matting white */
+
+    /* matting black */
+    .matting-black-border {
+        padding: 20px;
+        background-color: #fff;
+        border: 15px solid transparent;
+        border-image: 
+            linear-gradient(45deg, #111, #111) 1;
+        border-image-slice: 1;
+        border-image-width: 15px; 
+        border-image-outset: 0px; 
+        font-family: Arial, sans-serif;
+        text-align: center;
+        font-size: 18px;
+        box-shadow:
+            5px 5px 40px rgba(0, 0, 0, 0.5),
+            inset 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .matting-black-border-right{
+        position: absolute; 
+        left: 288px; 
+        top: 0px; 
+        width: 8.84211px; 
+        height: 292px; 
+        clip-path: polygon(0px 0px, 100% 3.17101%, 100% 100%, 0px 95.999%); 
+        background: rgb(88, 88, 88);
+    }
+
+    .matting-black-border-bottom{
+        position: absolute; 
+        left: 8px; 
+        top: 280px; 
+        width: 289px; 
+        height: 11.7895px; 
+        clip-path: polygon(0px 0px, 96.9027% 0px, 100% 100%, 2.39726% 100%); 
+        background: rgb(66, 66, 66);
+    }
+    /* end matting black */
+
+    /* matting black */
+    .frameless-border {
+        background-color: #fff;
+        /* border: 15px solid transparent; */
+        border-image: 
+            linear-gradient(45deg, #111, #111) 1;
+        border-image-slice: 1;
+        /* border-image-width: 15px;  */
+        border-image-outset: 0px; 
+        font-family: Arial, sans-serif;
+        text-align: center;
+        font-size: 18px;
+        box-shadow:
+            5px 5px 40px rgba(0, 0, 0, 0.5),
+            inset 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .frameless-border-right{
+        position: absolute; 
+        left: 288px; 
+        top: 0px; 
+        width: 8.84211px; 
+        height: 292px; 
+        clip-path: polygon(0px 0px, 100% 3.17101%, 100% 100%, 0px 95.999%); 
+        background: rgb(88, 88, 88);
+    }
+
+    .frameless-border-bottom{
+        position: absolute; 
+        left: 8px; 
+        top: 280px; 
+        width: 289px; 
+        height: 11.7895px; 
+        clip-path: polygon(0px 0px, 96.9027% 0px, 100% 100%, 2.39726% 100%); 
+        background: rgb(66, 66, 66);
+    }
+    /* end matting black */
 </style>
 @endsection
 
 @section('content')
 <div>
-    <ul>
+    <ul class="list-inline">
     @foreach ($frames as $frame)
-        <li>
+        <li class="list-inline-item">
             <a href="javascript:void(0)" data-class="{{ $frame->class }}" data-id="{{ $frame->id }}" class="frame-selection">
                 <img src="{{ Storage::url($frame->image) }}" style="width: 200px" alt="">
                 <br>

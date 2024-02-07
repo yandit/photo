@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\Faq\Database\Seeders;
+namespace Modules\Frames\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
-class FaqDatabaseSeeder extends Seeder
+class FramesDatabaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,6 +16,6 @@ class FaqDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        $this->call([StickableFrameSeederTableSeeder::class]);
     }
 }
