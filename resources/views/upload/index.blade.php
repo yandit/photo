@@ -17,11 +17,12 @@
         border-image-slice: 1;
         border-image-width: 15px; 
         border-image-outset: 0px; 
-        border-radius: 10px;
         font-family: Arial, sans-serif;
         text-align: center;
         font-size: 18px;
-        box-shadow: 5px 5px 40px rgba(0, 0, 0, 0.5);
+        box-shadow:
+            5px 5px 40px rgba(0, 0, 0, 0.5),
+            inset 0 0 10px rgba(0, 0, 0, 0.5);
     }
 
     .classic-black-border-right{
@@ -55,11 +56,12 @@
         border-image-slice: 1;
         border-image-width: 15px; 
         border-image-outset: 0px; 
-        border-radius: 10px;
+        box-shadow:
+            5px 5px 40px rgba(0, 0, 0, 0.5),
+            inset 0 0 10px rgba(0, 0, 0, 0.5);
         font-family: Arial, sans-serif;
         text-align: center;
         font-size: 18px;
-        box-shadow: 5px 5px 40px rgba(0, 0, 0, 0.5);
     }
 
     .classic-white-border-right{
@@ -90,7 +92,7 @@
     <ul>
     @foreach ($frames as $frame)
         <li>
-            <a href="javascript:void(0)" data-class="{{ $frame->class }}" class="frame-selection">
+            <a href="javascript:void(0)" data-class="{{ $frame->class }}" data-id="{{ $frame->id }}" class="frame-selection">
                 <img src="{{ Storage::url($frame->image) }}" style="width: 200px" alt="">
                 <br>
                 <span>{{$frame->title}}</span>
@@ -205,11 +207,22 @@
     function handleFrameSelection(){
         $('.frame-selection').on('click', function(){
             const border_class = $(this).data('class')
-            $('.image-container').each(function(){
-                $(this).find('.3d-border .border-right').attr('class', `border-right ${border_class}-border-right`)
-                $(this).find('.3d-border .border-bottom').attr('class', `border-bottom ${border_class}-border-bottom`)
+            const frame_id = $(this).data('id')
 
-                $(this).find('.img-list-container').attr('class', `m-2 img-list-container ${border_class}-border`)
+            $('.image-container').each(function(){
+                
+                $.ajax({
+                    url: `/upload/frame-selection/${frame_id}`,
+                    method: 'POST',
+                    success: (res)=>{
+                        if(res.success){
+                            $(this).find('.3d-border .border-right').attr('class', `border-right ${border_class}-border-right`)
+                            $(this).find('.3d-border .border-bottom').attr('class', `border-bottom ${border_class}-border-bottom`)
+
+                            $(this).find('.img-list-container').attr('class', `m-2 img-list-container ${border_class}-border`)
+                        }
+                    }
+                })
             })
         });
     }

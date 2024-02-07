@@ -184,14 +184,31 @@ class UploadController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * handle frame selection.
      *
-     * @param  \App\Upload  $upload
+     * @param  Modules\Frames\Entities\StickableFrame  $frame
      * @return \Illuminate\Http\Response
      */
-    public function show(Upload $upload)
+    public function frameSelection(StickableFrame $frame)
     {
-        //
+        $success = true;
+        $messages = 'success';
+
+        try {
+            $cart = cart();
+
+            $cart->frames_stickable_id = $frame->id;
+            $cart->save();
+
+        } catch (\Exception $e) {
+            $success = false;
+            $messages = $e->getMessage();
+        }
+
+        return response()->json([
+            'success'=> $success,
+            'messages'=> $messages,
+        ]);
     }
 
     /**

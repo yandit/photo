@@ -21,5 +21,6 @@ Route::get('/crop/{source}/x_{x?},y_{y?},w_{w},h_{h}/{path}', 'App\Http\Controll
 Route::get('/upload/{slug?}', 'App\Http\Controllers\UploadController@index')->name('upload.index');
 Route::post('/upload/{slug?}', 'App\Http\Controllers\UploadController@store')->name('upload.store');
 Route::put('/upload/edit/{upload}','App\Http\Controllers\UploadController@update')->name('upload.update');
+Route::post('/upload/frame-selection/{frame}','App\Http\Controllers\UploadController@frameSelection')->name('upload.frameselection');
 Route::delete('/upload/{upload}/destroy', 'App\Http\Controllers\UploadController@destroy')->name('upload.destroy');
 Route::post('/pin-check', 'App\Http\Controllers\UploadController@pin_check')->name('upload.pin_check');
