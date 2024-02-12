@@ -230,7 +230,7 @@
         <div style="position: relative;" data-id="{{ $upload->id }}" class="m-2 img-list-container {{$selected_frame->class}}-border">
             
 
-            <img style="max-width: 100%" class="img-lists" src="{{ route('getimage.crop', ['x'=> $upload->x ? $upload->x : 'null', 'y' => $upload->y ? $upload->y : 'null', 'w'=> $upload->width, 'h'=> $upload->height, 'path' => $upload->image, 'source' => $upload->source]) }}" alt="">
+            <img style="max-width: 100%" class="img-lists" src="{{ route('getimage.crop', ['x'=> $upload->x != null ? $upload->x : 'null', 'y' => $upload->y != null ? $upload->y : 'null', 'w'=> $upload->width, 'h'=> $upload->height, 'path' => $upload->image, 'source' => $upload->source]) }}" alt="">
 
             <div style="position: absolute; bottom: 0; left: 0; right: 0; display: flex;" class="text-center">
                 <div class="btn-crop" data-image="{{ $upload->source == 'local' ? Storage::url($upload->image) : $upload->image }}" 
@@ -367,9 +367,10 @@
             cropped_image.addEventListener('ready', function(){
                 canvas_data = cropper.getCanvasData();
                 cropbox_data = cropper.getCropBoxData();
+
                 
-                canvas_data.left = (cleft) ? parseFloat(cleft) : '';
-                canvas_data.top = (ctop) ? parseFloat(ctop) : '';
+                canvas_data.left = (cleft !== '') ? parseFloat(cleft) : '';
+                canvas_data.top = (ctop !== '') ? parseFloat(ctop) : '';
                 canvas_data.width = (cwidth) ? parseFloat(cwidth) : '';
                 canvas_data.height = (cheight) ? parseFloat(cheight) : '';
 
