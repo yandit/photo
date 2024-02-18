@@ -42,7 +42,8 @@ Route::group(['middleware' => ['web'], 'prefix' => config('usermanagement.admin_
             Route::put('{credential}','GalleryController@update')->name('googledrivegallery.update');
             Route::match(['get', 'post'], 'delete/{credential}','GalleryController@delete')->name('googledrivegallery.delete');	
         });
-        Route::get('/get-image', 'GoogleDriveMediaController@getGoogleDriveImage')->name('googledrive.get');
         // Route::get('/gallery', 'GoogleDriveMediaController@index')->name('googledrivegallery.index');
     });
 });
+
+Route::get('/get-image', 'GoogleDriveMediaController@getGoogleDriveImage')->name('googledrive.get');
