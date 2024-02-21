@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="{{ asset('fe/css/templatemo-lava.css') }}">
 
 <link rel="stylesheet" href="{{ asset('fe/css/owl-carousel.css') }}">
+@yield('styles')
 
 <!-- Google Font -->
 <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">

@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('index');
 });
 
+Route::get('/test', function () {
+    return view('google-drive.index');
+});
+
 Route::get('/crop/{source}/x_{x?},y_{y?},w_{w},h_{h}/{path}', 'App\Http\Controllers\GetImageController@crop')->where('path', '.*')->name('getimage.crop');
 Route::get('/upload/{slug?}', 'App\Http\Controllers\UploadController@index')->name('upload.index');
 Route::post('/upload/{slug?}', 'App\Http\Controllers\UploadController@store')->name('upload.store');
@@ -24,3 +28,9 @@ Route::put('/upload/edit/{upload}','App\Http\Controllers\UploadController@update
 Route::post('/upload/frame-selection/{frame}','App\Http\Controllers\UploadController@frameSelection')->name('upload.frameselection');
 Route::delete('/upload/{upload}/destroy', 'App\Http\Controllers\UploadController@destroy')->name('upload.destroy');
 Route::post('/pin-check', 'App\Http\Controllers\UploadController@pin_check')->name('upload.pin_check');
+
+Route::group([
+	'prefix' => 'list-image'
+], function () {		
+	Route::get('/{slug}', 'App\Http\Controllers\ListImageController@index')->name('list-image.index');
+});
