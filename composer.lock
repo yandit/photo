@@ -2525,21 +2525,21 @@
         },
         {
             "name": "masbug/flysystem-google-drive-ext",
-            "version": "v1.3.2",
+            "version": "v1.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/masbug/flysystem-google-drive-ext.git",
-                "reference": "c42a6ed1996b062587ace32eab9e90c7a11cf25d"
+                "reference": "a1ea9bae0172b6746330a8bbaf6fbf1b795e44ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/masbug/flysystem-google-drive-ext/zipball/c42a6ed1996b062587ace32eab9e90c7a11cf25d",
-                "reference": "c42a6ed1996b062587ace32eab9e90c7a11cf25d",
+                "url": "https://api.github.com/repos/masbug/flysystem-google-drive-ext/zipball/a1ea9bae0172b6746330a8bbaf6fbf1b795e44ee",
+                "reference": "a1ea9bae0172b6746330a8bbaf6fbf1b795e44ee",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "google/apiclient": "^2.2",
+                "google/apiclient": "^2.10",
                 "guzzlehttp/guzzle": "^6.3 | ^7.0",
                 "guzzlehttp/psr7": "^1.7|^2.0",
                 "league/flysystem": "^1.0",
@@ -2578,9 +2578,15 @@
             ],
             "support": {
                 "issues": "https://github.com/masbug/flysystem-google-drive-ext/issues",
-                "source": "https://github.com/masbug/flysystem-google-drive-ext/tree/v1.3.2"
+                "source": "https://github.com/masbug/flysystem-google-drive-ext/tree/v1.3.3"
             },
-            "time": "2022-06-24T06:43:30+00:00"
+            "funding": [
+                {
+                    "url": "https://ko-fi.com/masbug",
+                    "type": "ko_fi"
+                }
+            ],
+            "time": "2024-02-25T14:49:19+00:00"
         },
         {
             "name": "monolog/monolog",

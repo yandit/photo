@@ -117,11 +117,19 @@ class StickableController extends Controller
     {
         
         $post = $request->all();
+
+        $image = '';
+        $sub = strtotime(date('Y-m-d'));
+        if($request->file('image') && $request->file('image')->isValid()){
+            $image = $request->file('image')->store("public/{$this->uploadDir}/{$sub}");
+        }
+
         $stickable->title = $post['title'];
         $stickable->slug = $post['slug'];
         $stickable->class = $post['class'];
         $stickable->order = $post['order'];
         $stickable->status = $post['status'];
+        $stickable->image = $image;
         $stickable->updated_by_id = loggedInUser('id');
         $stickable->save();
 

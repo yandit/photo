@@ -2,7 +2,7 @@
 
 return [
     'name' => 'UserManagement',
-    'admin_prefix' => 'admin',
+    'admin_prefix' => 'backend',
 
     // exception for middleware checking
     'permission_exceptions' => [

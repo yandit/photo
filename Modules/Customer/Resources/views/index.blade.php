@@ -107,6 +107,7 @@
 	@parent
     <script>
       $(document).ready(function(){		  	
+        console.log(ADMIN_URL)
         var settings = {
           responsive: true,
           columnDefs: [

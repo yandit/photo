@@ -52,14 +52,15 @@
                     @if (strpos($file['mimetype'], 'image') !== false)
                         
                         <div class="card card-pin">
+                            <input type="checkbox" data-path="{{ $file['path'] }}" data-disk="{{ $file['disk_name'] }}">
                             <img class="card-img" src="{{ route('googledrive.get', ['disk_name'=> $file['disk_name'],'path' => $file['path']]) }}" alt="Card image">
-                            <div class="overlay">
+                            <!-- <div class="overlay">
                                 <h2 class="card-title title">Cool Title</h2>
                                 <div class="more">
                                     <a href="post.html">
                                     <i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     @endif
                 @endforeach
@@ -68,6 +69,7 @@
         </div>
     </div>
 </section>
+<a href="" class="btn btn-primary">Choose</a>
 <!-- ***** Features Big Item End ***** -->
 
 

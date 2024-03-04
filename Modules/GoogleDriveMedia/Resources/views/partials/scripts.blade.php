@@ -21,7 +21,7 @@
 </script>
 
 <script>
-  const ADMIN_URL = "{!! url('admin') !!}";
+  const ADMIN_URL = "{!! url(config('usermanagement.admin_prefix')) !!}";
   $(document).ready(function(){
     $.ajaxSetup({
       headers: {
