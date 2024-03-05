@@ -52,7 +52,7 @@
                     @if (strpos($file['mimetype'], 'image') !== false)
                         
                         <div class="card card-pin">
-                            <input type="checkbox" data-path="{{ $file['path'] }}" data-disk="{{ $file['disk_name'] }}">
+                            <input type="checkbox" class="select-image" data-path="{{ $file['path'] }}" data-disk="{{ $file['disk_name'] }}">
                             <img class="card-img" src="{{ route('googledrive.get', ['disk_name'=> $file['disk_name'],'path' => $file['path']]) }}" alt="Card image">
                             <!-- <div class="overlay">
                                 <h2 class="card-title title">Cool Title</h2>
@@ -69,7 +69,7 @@
         </div>
     </div>
 </section>
-<a href="" class="btn btn-primary">Choose</a>
+<a href="javascript:void(0)" id="submit" class="btn btn-primary">Choose</a>
 <!-- ***** Features Big Item End ***** -->
 
 
@@ -78,6 +78,67 @@
 @section('script')
 @parent
 <script>
-    
+    $(document).ready(function(){
+        handleOnload()
+        handleSelectImage()
+        handleSubmit()
+    })
+
+    const handleOnload = function(){
+        // Set checked checkbox jika datanya ada di local storage
+        $('.select-image').each(function() {
+            const path = $(this).data('path')
+            const disk = $(this).data('disk')
+            var isChecked = localStorage.getItem(path);
+            
+            if (isChecked) {
+                $(this).prop('checked', true);
+            }
+        });
+    }
+
+    const handleSelectImage = function(){
+        // Ketika checkbox diubah, simpan statusnya ke local storage
+        $('.select-image').change(function() {
+            const path = $(this).data('path')
+            const disk = $(this).data('disk')
+
+            const dataObj = {
+                path: path,
+                disk: disk
+            };
+            localStorage.setItem(path, JSON.stringify(dataObj));
+        });
+
+        // Hapus data di local storage ketika checkbox di-unchecked
+        $('.select-image').on('change', function() {
+            if (!$(this).prop('checked')) {
+                const path = $(this).data('path')
+                localStorage.removeItem(path);
+            }
+        });
+    }
+
+    const handleSubmit = function(){
+        $('#submit').click(function(){
+            // Array untuk menyimpan semua data dari local storage
+            var localStorageDataArray = [];
+
+            // Loop melalui semua item di local storage
+            for (var i = 0; i < localStorage.length; i++) {
+                var key = localStorage.key(i);
+                var value = localStorage.getItem(key);
+                var parsedValue = JSON.parse(value);
+
+                // Menambahkan data ke array
+                localStorageDataArray.push({
+                    path: parsedValue.path,
+                    disk: parsedValue.disk
+                });
+            }
+
+            console.log(localStorageDataArray)
+        })
+    }
 </script>
 @endsection
