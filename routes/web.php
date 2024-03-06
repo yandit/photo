@@ -32,5 +32,5 @@ Route::post('/pin-check', 'App\Http\Controllers\UploadController@pin_check')->na
 Route::group([
 	'prefix' => 'list-image'
 ], function () {		
-	Route::get('/{slug}', 'App\Http\Controllers\ListImageController@index')->name('list-image.index');
+	Route::match(['get', 'post'], '/{slug}', 'App\Http\Controllers\ListImageController@index')->name('list-image.index');
 });

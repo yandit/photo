@@ -28,6 +28,30 @@ class ListImageController extends Controller
      */
     public function index(Request $request, $slug)
     {
+
+        if($request->isMethod('post')){
+            $pins = $request->input('pin');
+            $pins = implode('', $pins);
+
+            $customer = Customer::where('slug', $slug)->first();
+            $credential = $customer->credential->where('pin', $pins)->first();
+
+            if(!$credential){
+                $messages = 'credential not found';
+                $success = false;
+                return back();
+            }
+
+            $session_id = session()->getId();
+
+            $session_whitelist = new SessionWhitelist;
+            $session_whitelist->session_id = $session_id;
+            $session_whitelist->credential_id = $credential->id;
+            $session_whitelist->save();
+
+            return redirect()->route('list-image.index', ['slug' => $slug]);
+        }
+
         $cart = cart();
 
         $selected_frame = $cart->frames_stickable;
@@ -43,6 +67,9 @@ class ListImageController extends Controller
 
         // get session whitelist
         $session_whitelist = $this->get_session_whitelist($credential);
+        if(!$session_whitelist){
+            return view('google-drive.input-pin');            
+        }
 
         $all_files = $this->get_all_gdrive_files($slug, $credential);
 

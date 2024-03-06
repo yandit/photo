@@ -16,7 +16,15 @@ class CreateUploadsTable extends Migration
         Schema::create('uploads', function (Blueprint $table) {
             $table->id();
             $table->string('source');
+            
+            // local image
             $table->string('image');
+            // ===================
+
+            // gdrive image
+            $table->string('disk')->nullable();
+			$table->string('path')->nullable();
+            // ===================
 
             // intervention image
             $table->string('x')->nullable();
