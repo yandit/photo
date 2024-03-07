@@ -169,35 +169,30 @@ class ListImageController extends Controller
     public function store(Request $request, $slug=null)
     {
         $cart = cart();
+        $datas  = $request->input('datas');
+        foreach($datas as $data){
+            $disk = $data['disk'];
+            $path = $data['path'];
 
-        $images  = $request->file('images');
-        foreach($images as $image){
-            // $result = CloudinaryStorage::upload($image->getRealPath(), $image->getClientOriginalName()); 
-
+            $image = \Storage::disk($disk)->get($path);
             $make = Image::make($image);
             $make->orientate();
             $height = $make->height();
             $width = $make->width();
 
             $square = ($width > $height) ? $height : $width;
-
-            $imageName = time().'.'.$image->extension();
-
-            $dateFolder = now()->format('Y-m-d');
-
-            // Simpan gambar ke penyimpanan lokal menggunakan Storage
-            $path = "public/uploads/$cart->session_id/$dateFolder";
-            $imageUrl = \Storage::putFile($path, $image);
-            // $imageUrl = \Storage::url($upload);
             Upload::create([
-                'source'=> 'local',
+                'source'=> 'gdrive',
                 'cart_id'=> $cart->id,
-                'image' => trim($imageUrl, '/'),
+                'image' => $path,
+                'disk' => $disk,
                 'width' => $square,
                 'height' => $square
             ]);
         }
-        return redirect()->route('upload.index', ['slug'=> $slug])->withSuccess('berhasil upload');
+        $redirect = route('upload.index', ['slug' => $slug]);
+
+        return response()->json(['status' => 'success', 'message' => 'Berhasil upload', 'redirect'=> $redirect]);
     }
 
     /**

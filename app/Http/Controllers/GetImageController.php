@@ -7,13 +7,13 @@ use Image;
 
 class GetImageController extends Controller
 {
-    public function crop($source, $x, $y, $w, $h, $path)
+    public function crop($source, $x, $y, $w, $h, $disk, $path)
     {
         $x = $x == 'null' ? null : (int)$x;
         $y = $y == 'null' ? null : (int)$y;
 
-        $img = Image::cache(function($image) use($x, $y, $w, $h, $path, $source) {
-            $path = $this->handlePath($source, $path);
+        $img = Image::cache(function($image) use($x, $y, $w, $h, $path, $source, $disk) {
+            $path = $this->handlePath($source, $path, $disk);
             
             $image->make($path)
                 ->orientate()
@@ -25,13 +25,14 @@ class GetImageController extends Controller
         return $img->response();
     }
 
-    protected function handlePath($source, $path)
+    protected function handlePath($source, $path, $disk)
     {
         if($source == 'local'){
             $path = \Storage::url($path);
             $path = trim($path, '/');
+        }elseif($source == 'gdrive'){
+            $path = \Storage::disk($disk)->get($path);
         }
-
         return $path;
     }
 }

@@ -78,6 +78,7 @@
 @section('script')
 @parent
 <script>
+    const SLUG = "{{$slug}}"
     $(document).ready(function(){
         handleOnload()
         handleSelectImage()
@@ -137,7 +138,22 @@
                 });
             }
 
-            console.log(localStorageDataArray)
+
+            $.ajax({
+                url: `${BASE_URL}/list-image/${SLUG}/store`,
+                method: 'POST',
+                data: {
+                    'datas': localStorageDataArray
+                },
+                success: function(res){
+                    if(res.status == 'success'){
+                        window.location.href = res.redirect;
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            })
         })
     }
 </script>

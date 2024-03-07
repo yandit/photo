@@ -221,6 +221,10 @@
         <input type="file" name="images[]" accept="image/*" multiple>
         <button>Upload</button>
     </form>
+    @if ($session_whitelist)
+    <a href="{{ route('list-image.index', ['slug'=> $slug]) }}">Pilih Google Drive Image</a>
+    @endif
+
     @foreach ($uploads as $upload)
     <div class="image-container">
         <div class="3d-border">
@@ -230,10 +234,10 @@
         <div style="position: relative;" data-id="{{ $upload->id }}" class="m-2 img-list-container {{$selected_frame->class}}-border">
             
 
-            <img style="max-width: 100%" class="img-lists" src="{{ route('getimage.crop', ['x'=> $upload->x != null ? $upload->x : 'null', 'y' => $upload->y != null ? $upload->y : 'null', 'w'=> $upload->width, 'h'=> $upload->height, 'path' => $upload->image, 'source' => $upload->source]) }}" alt="">
+            <img style="max-width: 100%" class="img-lists" src="{{ route('getimage.crop', ['x'=> $upload->x != null ? $upload->x : 'null', 'y' => $upload->y != null ? $upload->y : 'null', 'w'=> $upload->width, 'h'=> $upload->height, 'path' => $upload->image, 'source' => $upload->source, 'disk'=> 'google']) }}" alt="">
 
             <div style="position: absolute; bottom: 0; left: 0; right: 0; display: flex;" class="text-center">
-                <div class="btn-crop" data-image="{{ $upload->source == 'local' ? Storage::url($upload->image) : $upload->image }}" 
+                <div class="btn-crop" data-image="{{ $upload->source == 'local' ? Storage::url($upload->image) : route('googledrive.get', ['disk_name'=> $upload->disk,'path' => $upload->image]) }}" 
                     data-cleft="{{ $upload->cleft }}" 
                     data-ctop="{{ $upload->ctop }}" 
                     data-cwidth="{{ $upload->cwidth }}" 

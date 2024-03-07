@@ -53,7 +53,7 @@ class UploadController extends Controller
             // get session whitelist
             $session_whitelist = $this->get_session_whitelist($credential);
 
-            $all_files = $this->get_all_gdrive_files($slug, $credential);
+            // $all_files = $this->get_all_gdrive_files($slug, $credential);
         }
 
         return view('upload.index', compact('cart', 'frames', 'selected_frame', 'uploads', 'all_files', 'slug', 'session_whitelist'));

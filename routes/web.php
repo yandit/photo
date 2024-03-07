@@ -21,7 +21,7 @@ Route::get('/test', function () {
     return view('google-drive.index');
 });
 
-Route::get('/crop/{source}/x_{x?},y_{y?},w_{w},h_{h}/{path}', 'App\Http\Controllers\GetImageController@crop')->where('path', '.*')->name('getimage.crop');
+Route::get('/crop/{source}/x_{x?},y_{y?},w_{w},h_{h},disk_{disk?}/{path}', 'App\Http\Controllers\GetImageController@crop')->where('path', '.*')->name('getimage.crop');
 Route::get('/upload/{slug?}', 'App\Http\Controllers\UploadController@index')->name('upload.index');
 Route::post('/upload/{slug?}', 'App\Http\Controllers\UploadController@store')->name('upload.store');
 Route::put('/upload/edit/{upload}','App\Http\Controllers\UploadController@update')->name('upload.update');
@@ -33,4 +33,5 @@ Route::group([
 	'prefix' => 'list-image'
 ], function () {		
 	Route::match(['get', 'post'], '/{slug}', 'App\Http\Controllers\ListImageController@index')->name('list-image.index');
+    Route::post('/{slug}/store', 'App\Http\Controllers\ListImageController@store')->name('list-image.store');
 });
