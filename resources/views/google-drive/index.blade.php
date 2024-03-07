@@ -147,6 +147,7 @@
                 },
                 success: function(res){
                     if(res.status == 'success'){
+                        localStorage.clear();
                         window.location.href = res.redirect;
                     }
                 },
