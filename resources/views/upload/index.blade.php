@@ -200,6 +200,53 @@
         background: rgb(66, 66, 66);
     }
     /* end matting black */
+
+    .loading-overlay {
+        background: rgba(255, 255, 255, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 0;
+    }
+    .loading-overlay.classic-black, 
+    .loading-overlay.classic-white {
+        width: 250px;
+        height: 250px;
+    }
+
+    .loading-overlay.matting-black, 
+    .loading-overlay.matting-white {
+        width: 210px;
+        height: 210px;
+    }
+
+    .loading-overlay::after {
+        content: '';
+        width: 50px;
+        height: 50px;
+        border: 3px solid #ccc;
+        border-top-color: #333;
+        border-radius: 50%;
+        animation: rotate 1s linear infinite;
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .img-lists {
+        opacity: 0;
+    }
+
+    .img-lists.loaded {
+        opacity: 1;
+        transition: opacity 0.5s ease-in-out;
+    }
 </style>
 @endsection
 
@@ -232,9 +279,9 @@
             <div class="border-bottom {{$selected_frame->class}}-border-bottom"></div>
         </div>
         <div style="position: relative;" data-id="{{ $upload->id }}" class="m-2 img-list-container {{$selected_frame->class}}-border">
-            
+            <div class="loading-overlay {{$selected_frame->class}}"></div>
 
-            <img style="max-width: 100%" class="img-lists" src="{{ route('getimage.crop', ['x'=> $upload->x != null ? $upload->x : 'null', 'y' => $upload->y != null ? $upload->y : 'null', 'w'=> $upload->width, 'h'=> $upload->height, 'path' => $upload->image, 'source' => $upload->source, 'disk'=> 'google']) }}" alt="">
+            <img style="max-width: 100%" class="img-lists d-none" src="{{ route('getimage.crop', ['x'=> $upload->x != null ? $upload->x : 'null', 'y' => $upload->y != null ? $upload->y : 'null', 'w'=> $upload->width, 'h'=> $upload->height, 'path' => $upload->image, 'source' => $upload->source, 'disk'=> 'google']) }}" alt="">
 
             <div style="position: absolute; bottom: 0; left: 0; right: 0; display: flex;" class="text-center">
                 <div class="btn-crop" data-image="{{ $upload->source == 'local' ? Storage::url($upload->image) : route('googledrive.get', ['disk_name'=> $upload->disk,'path' => $upload->image]) }}" 
@@ -322,6 +369,17 @@
         handleFrameSelection()
         handleInitCrop()
         handleCrop()
+
+        $(document).find('.img-lists').each(function(){
+            $(this).attr('src', $(this).attr('src'))
+                .load(function() { 
+                    $(this).addClass('loaded');
+                    $(this).siblings('.loading-overlay').hide()
+                    $(this).removeClass('d-none')
+                })
+                .error(function() { alert('Error Loading Image');
+            });
+        })
     })
 
     function handleFrameSelection(){
