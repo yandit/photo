@@ -38,6 +38,10 @@
             inset 0 0 10px rgba(0, 0, 0, 0.5);
     }
 
+    .classic-black-dimension{
+        min-width: 250px
+    }
+
     .classic-black-border-right{
         position: absolute; 
         left: 288px; 
@@ -75,6 +79,10 @@
         font-family: Arial, sans-serif;
         text-align: center;
         font-size: 18px;
+    }
+
+    .classic-white-dimension{
+        min-width: 250px
     }
 
     .classic-white-border-right{
@@ -116,6 +124,10 @@
         font-size: 18px;
     }
 
+    .matting-white-dimension{
+        min-width: 210px
+    }
+
     .matting-white-border-right{
         position: absolute; 
         left: 288px; 
@@ -153,6 +165,10 @@
         box-shadow:
             5px 5px 40px rgba(0, 0, 0, 0.5),
             inset 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .matting-black-dimension{
+        min-width: 210px
     }
 
     .matting-black-border-right{
@@ -193,6 +209,10 @@
             inset 0 0 10px rgba(0, 0, 0, 0.5);
     }
 
+    .frameless-dimension{
+        min-width: 280px
+    }
+
     .frameless-border-right{
         position: absolute; 
         left: 288px; 
@@ -231,6 +251,11 @@
     .loading-overlay.matting-white {
         width: 210px;
         height: 210px;
+    }
+
+    .loading-overlay.frameless {
+        width: 280px;
+        height: 280px;
     }
 
     .loading-overlay::after {
@@ -284,41 +309,42 @@
     @if ($session_whitelist)
     <a href="{{ route('list-image.index', ['slug'=> $slug]) }}">Pilih Google Drive Image</a>
     @endif
+    <div style="display: flex; padding: 20px; overflow-x: auto;">
+        @foreach ($uploads as $upload)
+        <div class="image-container">
+            <div class="3d-border">
+                <div class="border-right {{$selected_frame->class}}-border-right"></div>
+                <div class="border-bottom {{$selected_frame->class}}-border-bottom"></div>
+            </div>
+            <div style="position: relative;" data-id="{{ $upload->id }}" class="mx-2 img-list-container {{$selected_frame->class}}-border">
+                <div class="loading-overlay {{$selected_frame->class}}"></div>
 
-    @foreach ($uploads as $upload)
-    <div class="image-container">
-        <div class="3d-border">
-            <div class="border-right {{$selected_frame->class}}-border-right"></div>
-            <div class="border-bottom {{$selected_frame->class}}-border-bottom"></div>
-        </div>
-        <div style="position: relative;" data-id="{{ $upload->id }}" class="m-2 img-list-container {{$selected_frame->class}}-border">
-            <div class="loading-overlay {{$selected_frame->class}}"></div>
+                <img style="width: 100%;" class="img-lists {{$selected_frame->class}}-dimension d-none" src="{{ route('getimage.crop', ['x'=> $upload->x != null ? $upload->x : 'null', 'y' => $upload->y != null ? $upload->y : 'null', 'w'=> $upload->width, 'h'=> $upload->height, 'path' => $upload->image, 'source' => $upload->source, 'disk'=> 'google']) }}" alt="">
 
-            <img style="max-width: 100%" class="img-lists d-none" src="{{ route('getimage.crop', ['x'=> $upload->x != null ? $upload->x : 'null', 'y' => $upload->y != null ? $upload->y : 'null', 'w'=> $upload->width, 'h'=> $upload->height, 'path' => $upload->image, 'source' => $upload->source, 'disk'=> 'google']) }}" alt="">
+                <div class="text-center action-button">
+                    <div class="btn-crop" data-image="{{ $upload->source == 'local' ? Storage::url($upload->image) : route('googledrive.get', ['disk_name'=> $upload->disk,'path' => $upload->image]) }}" 
+                        data-cleft="{{ $upload->cleft }}" 
+                        data-ctop="{{ $upload->ctop }}" 
+                        data-cwidth="{{ $upload->cwidth }}" 
+                        data-cheight="{{ $upload->cheight }}" 
+                        style="flex: 1; background: rgba(255, 0, 0, 0.5);"
+                    >
+                        <a href="javascript:void(0)">crop</i></a>
+                    </div>
+                    <div style="flex: 1; background: rgba(255, 0, 0, 0.5);">
+                        <form action="{{ route('upload.destroy', ['upload' => $upload->id]) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
 
-            <div class="text-center action-button">
-                <div class="btn-crop" data-image="{{ $upload->source == 'local' ? Storage::url($upload->image) : route('googledrive.get', ['disk_name'=> $upload->disk,'path' => $upload->image]) }}" 
-                    data-cleft="{{ $upload->cleft }}" 
-                    data-ctop="{{ $upload->ctop }}" 
-                    data-cwidth="{{ $upload->cwidth }}" 
-                    data-cheight="{{ $upload->cheight }}" 
-                    style="flex: 1; background: rgba(255, 0, 0, 0.5);"
-                >
-                    <a href="javascript:void(0)">crop</i></a>
-                </div>
-                <div style="flex: 1; background: rgba(255, 0, 0, 0.5);">
-                    <form action="{{ route('upload.destroy', ['upload' => $upload->id]) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-
-                        <button type="submit">Delete</button>
-                    </form>
+                            <button type="submit">Delete</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
+        
+        @endforeach
     </div>
-    
-    @endforeach
     <br>
     ==============================
     <br>
@@ -410,7 +436,8 @@
                             $(this).find('.3d-border .border-right').attr('class', `border-right ${border_class}-border-right`)
                             $(this).find('.3d-border .border-bottom').attr('class', `border-bottom ${border_class}-border-bottom`)
 
-                            $(this).find('.img-list-container').attr('class', `m-2 img-list-container ${border_class}-border`)
+                            $(this).find('.img-list-container').attr('class', `mx-2 img-list-container ${border_class}-border`)
+                            $(this).find('.img-lists').attr('class', `img-lists ${border_class}-dimension loaded`)
                         }
                     }
                 })
