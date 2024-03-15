@@ -11,7 +11,9 @@
         @yield('content')
     </div>
     <!-- /.content-wrapper -->
-    @include('partials.footer')
+    @if(!in_array(Route::currentRouteName(), ['upload.index', 'list-image.index']))
+      @include('partials.footer')
+    @endif
     </div>
     <!-- ./wrapper -->
 

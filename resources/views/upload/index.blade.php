@@ -8,6 +8,19 @@
         width: 296px; 
         height: 296px;
     }
+    .action-button{
+        position: absolute; 
+        bottom: 0; 
+        left: 0; 
+        right: 0; 
+        display: flex;
+        opacity: 0;
+        transition: opacity 0.2s ease; 
+    }
+    .image-container:hover .action-button {
+        opacity: 1; 
+    }
+
     .classic-black-border {
         /* padding: 20px; */
         background-color: #fff;
@@ -283,7 +296,7 @@
 
             <img style="max-width: 100%" class="img-lists d-none" src="{{ route('getimage.crop', ['x'=> $upload->x != null ? $upload->x : 'null', 'y' => $upload->y != null ? $upload->y : 'null', 'w'=> $upload->width, 'h'=> $upload->height, 'path' => $upload->image, 'source' => $upload->source, 'disk'=> 'google']) }}" alt="">
 
-            <div style="position: absolute; bottom: 0; left: 0; right: 0; display: flex;" class="text-center">
+            <div class="text-center action-button">
                 <div class="btn-crop" data-image="{{ $upload->source == 'local' ? Storage::url($upload->image) : route('googledrive.get', ['disk_name'=> $upload->disk,'path' => $upload->image]) }}" 
                     data-cleft="{{ $upload->cleft }}" 
                     data-ctop="{{ $upload->ctop }}" 
