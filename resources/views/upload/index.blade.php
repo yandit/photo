@@ -3,10 +3,23 @@
 @parent
 <link rel="stylesheet" href="{{ asset('fe/css/cropper.min.css') }}">
 <style>
+    .image-wrapper {
+        display: flex; 
+        padding: 20px; 
+        overflow-x: auto;
+    }
     .image-container {
         position: relative;
         width: 296px; 
         height: 296px;
+    }
+
+    .image-container:first-child {
+        margin-left: auto;
+    }
+
+    .image-container:last-child {
+        margin-right: auto;
     }
     .action-button{
         position: absolute; 
@@ -309,7 +322,7 @@
     @if ($session_whitelist)
     <a href="{{ route('list-image.index', ['slug'=> $slug]) }}">Pilih Google Drive Image</a>
     @endif
-    <div style="display: flex; padding: 20px; overflow-x: auto;">
+    <div class="image-wrapper">
         @foreach ($uploads as $upload)
         <div class="image-container">
             <div class="3d-border">
@@ -346,17 +359,6 @@
         @endforeach
     </div>
     <br>
-    ==============================
-    <br>
-    <ul>
-        @foreach ($all_files as $file)
-            @if (strpos($file['mimetype'], 'image') !== false)
-                <li>
-                    <img width="100px" src="{{ route('googledrive.get', ['disk_name'=> $file['disk_name'],'path' => $file['path']]) }}" alt="{{ $file['basename'] }}">
-                </li>
-            @endif
-        @endforeach
-    </ul>
 </div>
 
 <!-- The Modal -->
