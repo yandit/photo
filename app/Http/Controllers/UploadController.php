@@ -309,7 +309,8 @@ class UploadController extends Controller
      */
     public function destroy(Upload $upload)
     {
-
+        $success = true;
+        $messages = '';
         try {
             $isAllowed = $this->isAllowedToManipulatedImage($upload);
 
@@ -324,10 +325,14 @@ class UploadController extends Controller
             }
 
         } catch (\Exception $e) {
-            $errorMessage = $e->getMessage();
+            $messages = $e->getMessage();
+            $success = false;
         }
 
-        return redirect()->back();
+        return response()->json([
+            'success'=> $success,
+            'messages' => $messages
+        ]);
     }
 
     public function getImage(Request $request)

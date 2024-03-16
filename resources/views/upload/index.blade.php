@@ -349,7 +349,7 @@
                             @csrf
                             @method('DELETE')
 
-                            <button type="submit">Delete</button>
+                            <a href="javascript:void(0)" class="delete">Delete</a>
                         </form>
                     </div>
                 </div>
@@ -410,6 +410,7 @@
         handleFrameSelection()
         handleInitCrop()
         handleCrop()
+        handleDelete()
 
         $(document).find('.img-lists').each(function(){
             $(this).attr('src', $(this).attr('src'))
@@ -445,6 +446,30 @@
                 })
             })
         });
+    }
+
+    function handleDelete(){
+        $(document).on('click', '.delete', function(){
+            const form = $(this).closest('form');
+            const url = form.attr('action')
+            
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: (res) => {
+                    if(res.success){
+                        const image_container = $(this).closest('.image-container')
+                        image_container.fadeOut(100, function(){ $(this).remove(); });
+                    }
+                },
+                error: function(xhr) {
+                    console.error(xhr.responseText);
+                }
+            });
+        })
     }
 
     function handleInitCrop(){
