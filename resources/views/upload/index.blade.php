@@ -12,6 +12,7 @@
         position: relative;
         width: 296px; 
         height: 296px;
+        margin-right: 30px
     }
 
     .image-container:first-child {
@@ -314,10 +315,9 @@
         </li>
     @endforeach
     </ul>
-    <form action="{{ route('upload.store', ['slug'=> $slug]) }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('upload.store', ['slug'=> $slug]) }}" id="upload-form" method="post" enctype="multipart/form-data">
         @csrf
         <input type="file" name="images[]" accept="image/*" multiple>
-        <button>Upload</button>
     </form>
     @if ($session_whitelist)
     <a href="{{ route('list-image.index', ['slug'=> $slug]) }}">Pilih Google Drive Image</a>
@@ -346,9 +346,6 @@
                     </div>
                     <div style="flex: 1; background: rgba(255, 0, 0, 0.5);">
                         <form action="{{ route('upload.destroy', ['upload' => $upload->id]) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-
                             <a href="javascript:void(0)" class="delete">Delete</a>
                         </form>
                     </div>
@@ -408,10 +405,14 @@
             handlePromt()
         }
         handleFrameSelection()
+        handleUpload()
         handleInitCrop()
         handleCrop()
         handleDelete()
+        handleLoading()
+    })
 
+    function handleLoading() {
         $(document).find('.img-lists').each(function(){
             $(this).attr('src', $(this).attr('src'))
                 .load(function() { 
@@ -422,28 +423,85 @@
                 .error(function() { alert('Error Loading Image');
             });
         })
-    })
+    }
+
+    function handleUpload() {
+        $('[name="images[]"]').change(function(){
+            const form = document.getElementById('upload-form');
+            const formData = new FormData(form);
+
+            fetch('{{ route('upload.store', ['slug'=> $slug]) }}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(json => {
+                // Handle response data
+                const datas = json.datas
+                const frame = json.frame
+                datas.forEach(data => {
+                    $('.image-wrapper').append(`
+                        <div class="image-container">
+                            <div class="3d-border">
+                                <div class="border-right ${frame.class}-border-right"></div>
+                                <div class="border-bottom ${frame.class}-border-bottom"></div>
+                            </div>
+                            <div style="position: relative;" data-id="${data.id}" class="mx-2 img-list-container ${frame.class}-border">
+                                <div class="loading-overlay ${frame.class}"></div>
+
+                                <img style="width: 100%;" class="img-lists ${frame.class}-dimension d-none" src="${data.image_url}" alt="">
+
+                                <div class="text-center action-button">
+                                    <div class="btn-crop" data-image="${data.storage}" data-cleft="" data-ctop="" data-cwidth="" data-cheight="" style="flex: 1; background: rgba(255, 0, 0, 0.5);">
+                                        <a href="javascript:void(0)">crop</a>
+                                    </div>
+                                    <div style="flex: 1; background: rgba(255, 0, 0, 0.5);">
+                                        <form action="${data.delete_url}" method="POST">
+                                            <a href="javascript:void(0)" class="delete">Delete</a>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    `) 
+                    handleLoading()
+                    
+                });
+            })
+            .catch(error => {
+                // Handle errors
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        })
+    }
 
     function handleFrameSelection(){
         $('.frame-selection').on('click', function(){
             const border_class = $(this).data('class')
             const frame_id = $(this).data('id')
 
-            $('.image-container').each(function(){
-                
-                $.ajax({
-                    url: `/upload/frame-selection/${frame_id}`,
-                    method: 'POST',
-                    success: (res)=>{
-                        if(res.success){
+            $.ajax({
+                url: `/upload/frame-selection/${frame_id}`,
+                method: 'POST',
+                success: (res)=>{
+                    if(res.success){
+                        $('.image-container').each(function(){  
+                            
                             $(this).find('.3d-border .border-right').attr('class', `border-right ${border_class}-border-right`)
                             $(this).find('.3d-border .border-bottom').attr('class', `border-bottom ${border_class}-border-bottom`)
 
                             $(this).find('.img-list-container').attr('class', `mx-2 img-list-container ${border_class}-border`)
                             $(this).find('.img-lists').attr('class', `img-lists ${border_class}-dimension loaded`)
-                        }
+                                
+                        })
                     }
-                })
+                }
             })
         });
     }

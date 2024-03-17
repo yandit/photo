@@ -157,6 +157,9 @@ class UploadController extends Controller
         $cart = cart();
 
         $images  = $request->file('images');
+
+        $uploads = [];
+
         foreach($images as $image){
             // $result = CloudinaryStorage::upload($image->getRealPath(), $image->getClientOriginalName()); 
 
@@ -175,15 +178,28 @@ class UploadController extends Controller
             $path = "public/uploads/$cart->session_id/$dateFolder";
             $imageUrl = \Storage::putFile($path, $image);
             // $imageUrl = \Storage::url($upload);
-            Upload::create([
+            $upload = Upload::create([
                 'source'=> 'local',
                 'cart_id'=> $cart->id,
                 'image' => trim($imageUrl, '/'),
                 'width' => $square,
                 'height' => $square
             ]);
+
+            $upload = (object)[
+                'id' => $upload->id,
+                'storage'=> \Storage::url($upload->image),
+                'image_url'=> route('getimage.crop', ['x'=> $upload->x != null ? $upload->x : 'null', 'y' => $upload->y != null ? $upload->y : 'null', 'w'=> $upload->width, 'h'=> $upload->height, 'path' => $upload->image, 'source' => $upload->source, 'disk'=> 'google']),
+                'delete_url' => route('upload.destroy', ['upload' => $upload->id])
+            ];
+
+            array_push($uploads, $upload);
         }
-        return redirect()->route('upload.index', ['slug'=> $slug])->withSuccess('berhasil upload');
+        return response()->json([
+            'success' => true,
+            'frame' => $cart->frames_stickable,
+            'datas' => $uploads
+        ]);
     }
 
     /**
