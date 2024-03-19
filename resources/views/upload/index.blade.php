@@ -8,6 +8,13 @@
         padding: 20px; 
         overflow-x: auto;
     }
+    .image-wrapper::-webkit-scrollbar {
+        display: none;
+    }
+
+    .image-wrapper::-moz-scrollbar {
+        display: none;
+    }
     .image-container {
         position: relative;
         width: 296px; 
@@ -384,6 +391,19 @@
     </div>
 </div>
 
+<div class="modal" id="loading-modal" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <!-- Animasi loading -->
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('script')
@@ -430,6 +450,7 @@
             const form = document.getElementById('upload-form');
             const formData = new FormData(form);
 
+            $('#loading-modal').modal('show');
             fetch('{{ route('upload.store', ['slug'=> $slug]) }}', {
                 method: 'POST',
                 body: formData
@@ -473,10 +494,13 @@
                     handleLoading()
                     
                 });
+
+                $('#loading-modal').modal('hide');
             })
             .catch(error => {
                 // Handle errors
                 console.error('There was a problem with the fetch operation:', error);
+                $('#loading-modal').modal('hide');
             });
         })
     }
