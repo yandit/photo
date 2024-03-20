@@ -3,9 +3,10 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('fe/google-drive/css/app.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('fe/google-drive/css/theme.css') }}">
 <style>
-    .card {
+    .card-pin {
         position: relative;
         display: inline-block;
+        cursor: pointer;
     }
     .select-image {
         position: absolute;
@@ -13,6 +14,9 @@
         left: 10px;
         z-index: 1;
         opacity: 0.5;
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
     }
 </style>
 @endsection
@@ -60,20 +64,28 @@
 <section class="section" id="about">
     <div class="container">
         <div class="row">
-			<div class="card-columns">
+            <div class="col-12">
+                <div class="card text-white bg-danger mb-3" style="width: 100%">
+                    <div class="card-header">Info</div>
+                    <div class="card-body">
+                        <h5 class="card-title">Success card title</h5>
+                        <span class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content. <br> <a class="text-light" href="{{ route('upload.index', ['slug'=> $slug]) }}">klik untuk upload foto</a></span>
+                    </div>
+                </div>
+            </div>
+			<div class="col-12 card-columns">
                 @foreach ($all_files as $file)
                     @if (strpos($file['mimetype'], 'image') !== false)
                         
                         <div class="card card-pin">
                             <input type="checkbox" class="select-image" data-path="{{ $file['path'] }}" data-disk="{{ $file['disk_name'] }}">
                             <img class="card-img" src="{{ route('googledrive.get', ['disk_name'=> $file['disk_name'],'path' => $file['path']]) }}" alt="Card image">
-                            <!-- <div class="overlay">
-                                <h2 class="card-title title">Cool Title</h2>
+                            <div class="overlay">
                                 <div class="more">
                                     <a href="post.html">
-                                    <i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+                                    <i class="fa fa-search-plus" aria-hidden="true" style="z-index: 5"></i> Zoom </a>
                                 </div>
-                            </div> -->
+                            </div>
                         </div>
                     @endif
                 @endforeach
@@ -82,6 +94,18 @@
         </div>
     </div>
 </section>
+<div class="modal" id="loading-modal" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <!-- Animasi loading -->
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <a href="javascript:void(0)" id="submit" class="btn btn-primary">Choose</a>
 <!-- ***** Features Big Item End ***** -->
 
@@ -100,11 +124,16 @@
     })
 
     const handleCheckboxClickPhoto = function(){
-        $('.card-img').on('click', function(){
-            // Mengambil checkbox terkait
-            const checkbox = $(this).siblings('.select-image');
-            $(checkbox).prop('checked', !$(checkbox).is(':checked'));
-            handleCheckbox(checkbox)
+        $('.card-pin .overlay').on('click', function(event){
+            if ($(event.target).is('a')) {
+                // Jika elemen yang diklik adalah elemen <a>, hentikan penyebaran event
+                event.stopPropagation();
+            }else{
+                // Mengambil checkbox terkait
+                const checkbox = $(this).siblings('.select-image');
+                $(checkbox).prop('checked', !$(checkbox).is(':checked'));
+                handleCheckbox(checkbox)
+            }
         });
     }
 
@@ -162,7 +191,7 @@
                 });
             }
 
-
+            $('#loading-modal').modal('show');
             $.ajax({
                 url: `${BASE_URL}/list-image/${SLUG}/store`,
                 method: 'POST',
@@ -174,6 +203,9 @@
                         localStorage.clear();
                         window.location.href = res.redirect;
                     }
+                },
+                finally: function(){
+                    $('#loading-modal').modal('hide');
                 },
                 error: function(xhr, status, error) {
                     console.error(error);
