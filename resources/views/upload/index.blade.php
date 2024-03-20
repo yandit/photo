@@ -5,7 +5,7 @@
 <style>
     .image-wrapper {
         display: flex; 
-        padding: 20px; 
+        padding: 50px; 
         overflow-x: auto;
     }
     .image-wrapper::-webkit-scrollbar {

@@ -2,6 +2,19 @@
 @section('styles')
 <link rel="stylesheet" type="text/css" href="{{ asset('fe/google-drive/css/app.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('fe/google-drive/css/theme.css') }}">
+<style>
+    .card {
+        position: relative;
+        display: inline-block;
+    }
+    .select-image {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 1;
+        opacity: 0.5;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -83,7 +96,33 @@
         handleOnload()
         handleSelectImage()
         handleSubmit()
+        handleCheckboxClickPhoto()
     })
+
+    const handleCheckboxClickPhoto = function(){
+        $('.card-img').on('click', function(){
+            // Mengambil checkbox terkait
+            const checkbox = $(this).siblings('.select-image');
+            $(checkbox).prop('checked', !$(checkbox).is(':checked'));
+            handleCheckbox(checkbox)
+        });
+    }
+
+    const handleCheckbox = function(checkbox){
+        const path = $(checkbox).data('path')
+        const disk = $(checkbox).data('disk')
+        // Toggle status centang checkbox
+
+        if($(checkbox).is(':checked')){
+            const dataObj = {
+                path: path,
+                disk: disk
+            };
+            localStorage.setItem(path, JSON.stringify(dataObj));
+        }else{
+            localStorage.removeItem(path);
+        }
+    }
 
     const handleOnload = function(){
         // Set checked checkbox jika datanya ada di local storage
@@ -100,23 +139,8 @@
 
     const handleSelectImage = function(){
         // Ketika checkbox diubah, simpan statusnya ke local storage
-        $('.select-image').change(function() {
-            const path = $(this).data('path')
-            const disk = $(this).data('disk')
-
-            const dataObj = {
-                path: path,
-                disk: disk
-            };
-            localStorage.setItem(path, JSON.stringify(dataObj));
-        });
-
-        // Hapus data di local storage ketika checkbox di-unchecked
-        $('.select-image').on('change', function() {
-            if (!$(this).prop('checked')) {
-                const path = $(this).data('path')
-                localStorage.removeItem(path);
-            }
+        $('.select-image').on('change',function(e) {
+            handleCheckbox(this)
         });
     }
 
