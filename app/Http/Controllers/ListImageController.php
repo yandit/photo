@@ -173,22 +173,23 @@ class ListImageController extends Controller
         foreach($datas as $data){
             $disk = $data['disk'];
             $path = $data['path'];
+            if(\Storage::disk($disk)->exists($path)){
+                $image = \Storage::disk($disk)->get($path);
+                $make = Image::make($image);
+                $make->orientate();
+                $height = $make->height();
+                $width = $make->width();
 
-            $image = \Storage::disk($disk)->get($path);
-            $make = Image::make($image);
-            $make->orientate();
-            $height = $make->height();
-            $width = $make->width();
-
-            $square = ($width > $height) ? $height : $width;
-            Upload::create([
-                'source'=> 'gdrive',
-                'cart_id'=> $cart->id,
-                'image' => $path,
-                'disk' => $disk,
-                'width' => $square,
-                'height' => $square
-            ]);
+                $square = ($width > $height) ? $height : $width;
+                Upload::create([
+                    'source'=> 'gdrive',
+                    'cart_id'=> $cart->id,
+                    'image' => $path,
+                    'disk' => $disk,
+                    'width' => $square,
+                    'height' => $square
+                ]);
+            }
         }
         $redirect = route('upload.index', ['slug' => $slug]);
 

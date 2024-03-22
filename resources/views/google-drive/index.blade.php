@@ -18,6 +18,18 @@
         width: 20px;
         height: 20px;
     }
+    .btn-choose {
+        position: fixed;
+        bottom: 20px; 
+        left: 50%;
+        transform: translateX(-50%);
+        text-decoration: none;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        z-index: 2;
+        opacity: 0
+    }
 </style>
 @endsection
 
@@ -61,7 +73,7 @@
 <!-- ***** Header Area End ***** -->
 
 <!-- ***** Features Big Item Start ***** -->
-<section class="section" id="about">
+<section class="section" id="about" style="z-index: 1;">
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -106,7 +118,7 @@
         </div>
     </div>
 </div>
-<a href="javascript:void(0)" id="submit" class="btn btn-primary">Choose</a>
+<a href="javascript:void(0)" id="submit" class="btn btn-primary btn-choose">Pilih Gambar</a>
 <!-- ***** Features Big Item End ***** -->
 
 
@@ -121,6 +133,7 @@
         handleSelectImage()
         handleSubmit()
         handleCheckboxClickPhoto()
+        handleShowButton()
     })
 
     const handleCheckboxClickPhoto = function(){
@@ -150,6 +163,15 @@
             localStorage.setItem(path, JSON.stringify(dataObj));
         }else{
             localStorage.removeItem(path);
+        }
+        handleShowButton()
+    }
+
+    const handleShowButton = function(){
+        if($('.select-image:checked').length){
+            $(".btn-choose").animate({ opacity: 1 }, 300);
+        }else{
+            $(".btn-choose").animate({ opacity: 0 }, 300);
         }
     }
 
