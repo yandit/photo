@@ -94,8 +94,9 @@
                             <img class="card-img" src="{{ route('googledrive.get', ['disk_name'=> $file['disk_name'],'path' => $file['path']]) }}" alt="Card image">
                             <div class="overlay">
                                 <div class="more">
-                                    <a href="post.html">
-                                    <i class="fa fa-search-plus" aria-hidden="true" style="z-index: 5"></i> Zoom </a>
+                                    <a href="javascript:void(0)" class="zoom">
+                                        <i class="fa fa-search-plus" aria-hidden="true" style="z-index: 5"></i> Zoom 
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -118,6 +119,22 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="zoom-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Gambar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Gambar yang ditampilkan -->
+                <img src="" class="img-fluid" id="zoomed-image" style="width: 100%" alt="Gambar">
+            </div>
+        </div>
+    </div>
+</div>
 <a href="javascript:void(0)" id="submit" class="btn btn-primary btn-choose">Pilih Gambar</a>
 <!-- ***** Features Big Item End ***** -->
 
@@ -134,7 +151,17 @@
         handleSubmit()
         handleCheckboxClickPhoto()
         handleShowButton()
+        handleZoom()
     })
+    
+    const handleZoom = function(){
+        $('.zoom').on('click', function(){
+            const imgSrc = $(this).closest('.card-pin').find('.card-img').attr('src')
+            const modal = $('#zoom-modal')
+            modal.find('#zoomed-image').attr('src', imgSrc)
+            modal.modal('show')
+        })
+    }
 
     const handleCheckboxClickPhoto = function(){
         $('.card-pin .overlay').on('click', function(event){
