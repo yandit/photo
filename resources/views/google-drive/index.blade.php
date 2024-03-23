@@ -156,13 +156,19 @@
         // Toggle status centang checkbox
 
         if($(checkbox).is(':checked')){
-            const dataObj = {
+            // Mendapatkan data yang ada di local storage, jika ada
+            const existingData = localStorage.getItem("gdrive_images");
+
+            let dataImages = existingData ? JSON.parse(existingData) : [];
+            const newObj = {
                 path: path,
                 disk: disk
             };
-            localStorage.setItem(path, JSON.stringify(dataObj));
+            dataImages.push(newObj);
+
+            localStorage.setItem('gdrive_images', JSON.stringify(dataImages));
         }else{
-            localStorage.removeItem(path);
+            removeObjectByPath(path);
         }
         handleShowButton()
     }
@@ -180,12 +186,56 @@
         $('.select-image').each(function() {
             const path = $(this).data('path')
             const disk = $(this).data('disk')
-            var isChecked = localStorage.getItem(path);
+            const isChecked = isObjectWithPathExists(path);
             
             if (isChecked) {
                 $(this).prop('checked', true);
             }
         });
+    }
+
+    const isObjectWithPathExists = function(path) {
+        // Mendapatkan data yang ada di local storage, jika ada
+        const existingData = localStorage.getItem("gdrive_images");
+
+        // Jika tidak ada data sebelumnya atau data kosong, kembalikan false
+        if (!existingData) {
+            return false;
+        }
+
+        // Mengonversi data menjadi array
+        const dataImages = JSON.parse(existingData);
+
+        // Memeriksa apakah ada objek dengan ID yang sesuai di dalam array
+        return dataImages.some(function(obj) {
+            return obj.path === path;
+        });
+    }
+
+    const removeObjectByPath = function(path) {
+        // Mendapatkan data yang ada di local storage, jika ada
+        const existingData = localStorage.getItem("gdrive_images");
+
+        // Jika tidak ada data sebelumnya, tidak ada yang perlu dihapus
+        if (!existingData) {
+            return;
+        }
+
+        // Mengonversi data menjadi array
+        let dataImages = JSON.parse(existingData);
+
+        // Mencari indeks objek dengan ID yang sesuai di dalam array
+        const indexToRemove = dataImages.findIndex(function(obj) {
+            return obj.path === path;
+        });
+
+        // Jika objek dengan ID yang sesuai ditemukan, hapus objek tersebut dari array
+        if (indexToRemove !== -1) {
+            dataImages.splice(indexToRemove, 1);
+
+            // Simpan array yang sudah diperbarui ke dalam local storage
+            localStorage.setItem("gdrive_images", JSON.stringify(dataImages));
+        }
     }
 
     const handleSelectImage = function(){
@@ -197,32 +247,24 @@
 
     const handleSubmit = function(){
         $('#submit').click(function(){
-            // Array untuk menyimpan semua data dari local storage
-            var localStorageDataArray = [];
+            const existingData = localStorage.getItem('gdrive_images')
 
-            // Loop melalui semua item di local storage
-            for (var i = 0; i < localStorage.length; i++) {
-                var key = localStorage.key(i);
-                var value = localStorage.getItem(key);
-                var parsedValue = JSON.parse(value);
-
-                // Menambahkan data ke array
-                localStorageDataArray.push({
-                    path: parsedValue.path,
-                    disk: parsedValue.disk
-                });
+            if(!existingData){
+                return false
             }
+
+            const dataImages = JSON.parse(existingData);
 
             $('#loading-modal').modal('show');
             $.ajax({
                 url: `${BASE_URL}/list-image/${SLUG}/store`,
                 method: 'POST',
                 data: {
-                    'datas': localStorageDataArray
+                    'datas': dataImages
                 },
                 success: function(res){
                     if(res.status == 'success'){
-                        localStorage.clear();
+                        localStorage.removeItem('gdrive_images');
                         window.location.href = res.redirect;
                     }
                 },
