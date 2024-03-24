@@ -306,6 +306,20 @@
         opacity: 1;
         transition: opacity 0.5s ease-in-out;
     }
+
+    .btn-checkout {
+        position: fixed;
+        bottom: 20px; 
+        left: 50%;
+        transform: translateX(-50%);
+        text-decoration: none;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        z-index: 2;
+        font-weight: bold;
+        opacity: 0
+    }
 </style>
 @endsection
 
@@ -363,6 +377,7 @@
         @endforeach
     </div>
     <br>
+    <a href="javascript:void(0)" class="main-button-slider text-center btn-checkout">Checkout</a>
 </div>
 
 <!-- The Modal -->
@@ -430,7 +445,17 @@
         handleCrop()
         handleDelete()
         handleLoading()
+        handleShowCheckoutButton()
     })
+
+    function handleShowCheckoutButton() {
+        const isImageExists = $(document).find('.image-container').length
+        if(isImageExists){
+            $('.btn-checkout').animate({ opacity: 1 }, 300);
+        }else{
+            $('.btn-checkout').animate({ opacity: 0 }, 300);
+        }
+    }
 
     function handleLoading() {
         $(document).find('.img-lists').each(function(){
@@ -495,6 +520,7 @@
                     
                 });
 
+                handleShowCheckoutButton()
                 $('#loading-modal').modal('hide');
             })
             .catch(error => {
@@ -544,7 +570,10 @@
                 success: (res) => {
                     if(res.success){
                         const image_container = $(this).closest('.image-container')
-                        image_container.fadeOut(100, function(){ $(this).remove(); });
+                        image_container.fadeOut(100, function(){
+                             $(this).remove(); 
+                             handleShowCheckoutButton()
+                        });
                     }
                 },
                 error: function(xhr) {
