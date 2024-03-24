@@ -377,7 +377,7 @@
         @endforeach
     </div>
     <br>
-    <a href="javascript:void(0)" class="main-button-slider text-center btn-checkout">Checkout</a>
+    <a href="{{ route('checkout.order-details') }}" class="main-button-slider text-center btn-checkout">Checkout</a>
 </div>
 
 <!-- The Modal -->

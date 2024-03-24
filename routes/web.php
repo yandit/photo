@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('index');
-});
+})->name('homepage');
 
 Route::get('/test', function () {
     return view('google-drive.index');
@@ -33,5 +33,12 @@ Route::group([
 	'prefix' => 'list-image'
 ], function () {		
 	Route::match(['get', 'post'], '/{slug}', 'App\Http\Controllers\ListImageController@index')->name('list-image.index');
+    Route::post('/{slug}/store', 'App\Http\Controllers\ListImageController@store')->name('list-image.store');
+});
+
+Route::group([
+	'prefix' => 'checkout'
+], function () {		
+	Route::get('/order-details/{slug?}', 'App\Http\Controllers\CheckoutController@order_details')->name('checkout.order-details');
     Route::post('/{slug}/store', 'App\Http\Controllers\ListImageController@store')->name('list-image.store');
 });
