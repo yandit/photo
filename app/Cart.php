@@ -19,4 +19,9 @@ class Cart extends Model
     {
         return $this->belongsTo(StickableFrame::class);
     }
+
+    public function cart_checkout()
+    {
+        return $this->hasOne(CartCheckout::class);
+    }
 }

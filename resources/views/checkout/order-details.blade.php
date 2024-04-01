@@ -171,53 +171,57 @@
             <span class="page-title"><span class="page-number">1</span>Detail Pesanan</span>
             <span class="page-title"><span class="page-number">2</span>Pembayaran</span>
         </div>
-        <div class="row">
-            <div class="col-md-7">
-                <div class="left border">
-                    <div class="row">
-                        <span class="header">Detail Pemesan</span>
-                    </div>
-                    <form>
-                        <span>Nama:</span>
-                        <input placeholder="Alexander">
-                        <span>Email:</span>
-                        <input placeholder="example@mail.com">
-                        <span>Alamat:</span>
-                        <textarea placeholder="Jl. jalan"></textarea>
-                    </form>
-                </div>                        
-            </div>
-            <div class="col-md-5">
-                <div class="right border">
-                    <div class="header">Rincian Pesanan</div>
-                    <p>4 items</p>
-                    <div class="row item">
-                        <div class="col-4 align-self-center"><img class="img-fluid" src="https://i.imgur.com/79M6pU0.png"></div>
-                        <div class="col-8">
-                            <div class="row"><b>Rp. 350.000</b></div>
-                            <div class="row text-muted">Be Legandary Lipstick-Nude rose</div>
+        <form action="" method="POST">
+            @csrf
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="left border">
+                        <div class="row">
+                            <span class="header">Detail Pemesan</span>
                         </div>
+                        
+                        <span>Nama:</span>
+                        <input name="name" placeholder="Alexander" value="{{ old('name', @$cart->cart_checkout->name) }}">
+                        <span>Email:</span>
+                        <input name="email" placeholder="example@mail.com" value="{{ old('email', @$cart->cart_checkout->email) }}">
+                        <span>Alamat:</span>
+                        <textarea name="address" placeholder="Jl. jalan">{{ old('address', @$cart->cart_checkout->address) }}</textarea>
+                        
+                    </div>                        
+                </div>
+                <div class="col-md-5">
+                    <div class="right border">
+                        <div class="header">Rincian Pesanan</div>
+                        <p>{{count($cart->uploads)}} items</p>
+                        <div class="row item">
+                            <div class="col-4 align-self-center"><img class="img-fluid" src="{{ route('getimage.crop', ['x'=> $cart->uploads->first()->x != null ? $cart->uploads->first()->x : 'null', 'y' => $cart->uploads->first()->y != null ? $cart->uploads->first()->y : 'null', 'w'=> $cart->uploads->first()->width, 'h'=> $cart->uploads->first()->height, 'path' => $cart->uploads->first()->image, 'source' => $cart->uploads->first()->source, 'disk'=> 'google']) }}"></div>
+                            <div class="col-8">
+                                <div class="row"><b>Rp. 350.000</b></div>
+                                <div class="row text-muted">{{ $cart->frames_stickable->title }}</div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row lower">
+                            <div class="col text-left">Subtotal</div>
+                            <div class="col text-right">Rp. 350.000</div>
+                        </div>
+                        <div class="row lower">
+                            <div class="col text-left">Ongkir</div>
+                            <div class="col text-right">Gratis</div>
+                        </div>
+                        <div class="row lower">
+                            <div class="col text-left"><a href="#"><u>Masukkan code voucher</u></a></div>
+                        </div>
+                        <div class="row lower">
+                            <div class="col text-left"><b>Total Pembayaran</b></div>
+                            <div class="col text-right"><b>Rp. 350.000</b></div>
+                        </div>
+                        <button class="btn">Pembayaran</button>
                     </div>
-                    <hr>
-                    <div class="row lower">
-                        <div class="col text-left">Subtotal</div>
-                        <div class="col text-right">Rp. 350.000</div>
-                    </div>
-                    <div class="row lower">
-                        <div class="col text-left">Ongkir</div>
-                        <div class="col text-right">Gratis</div>
-                    </div>
-                    <div class="row lower">
-                        <div class="col text-left"><a href="#"><u>Masukkan code voucher</u></a></div>
-                    </div>
-                    <div class="row lower">
-                        <div class="col text-left"><b>Total Pembayaran</b></div>
-                        <div class="col text-right"><b>Rp. 350.000</b></div>
-                    </div>
-                    <button class="btn">Pembayaran</button>
                 </div>
             </div>
-        </div>
+        </form>
+        
     </div>
     <div>
     </div>

@@ -39,6 +39,5 @@ Route::group([
 Route::group([
 	'prefix' => 'checkout'
 ], function () {		
-	Route::get('/order-details/{slug?}', 'App\Http\Controllers\CheckoutController@order_details')->name('checkout.order-details');
-    Route::post('/{slug}/store', 'App\Http\Controllers\ListImageController@store')->name('list-image.store');
+	Route::match(['get', 'post'],'/order-details/{slug?}', 'App\Http\Controllers\CheckoutController@order_details')->name('checkout.order-details');
 });
