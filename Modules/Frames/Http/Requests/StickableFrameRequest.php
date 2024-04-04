@@ -42,6 +42,7 @@ class StickableFrameRequest extends FormRequest
             'order' => 'required|integer',
             'image' => 'required|max:3000|mimetypes:image/jpeg,image/png,image/jpg',
             'status' => 'required|in:draft,publish',
+            'price' => 'required|numeric|min:0',
         ], $appends);
     }
 }

@@ -60,6 +60,16 @@
                                                 <span class="help-block">{{ $errors->first('class') }}</span>
                                             @endif
                           </div>
+
+                          <div class="form-group {{ ($errors->first('price')) ? 'has-error' : '' }}">
+                            <label for="fclass">Price <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="fprice" placeholder="Price" name="price" 
+                                value="{{ old('price', $stickable->price) }}" required
+                                data-parsley-trigger="keyup focusout">
+                                            @if($errors->has('price'))										
+                                                <span class="help-block">{{ $errors->first('price') }}</span>
+                                            @endif
+                            </div>
             
             
                           <div class="form-group {{ ($errors->first('image')) ? 'has-error' : '' }}">

@@ -20,6 +20,7 @@ class StickableFrame extends Model
         'image',
         'order',        
         'status',
+        'price',
         'created_by_id',
         'updated_by_id'
     ];

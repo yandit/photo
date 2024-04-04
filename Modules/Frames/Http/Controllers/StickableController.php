@@ -106,6 +106,7 @@ class StickableController extends Controller
             'class' => $post['class'],
             'order' => $post['order'],
             'status' => $post['status'],
+            'price' => $post['price'],
             'image' => $image,
             'created_by_id' => loggedInUser('id')
         ]);
@@ -129,6 +130,7 @@ class StickableController extends Controller
         $stickable->class = $post['class'];
         $stickable->order = $post['order'];
         $stickable->status = $post['status'];
+        $stickable->price = $post['price'];
         $stickable->image = $image;
         $stickable->updated_by_id = loggedInUser('id');
         $stickable->save();

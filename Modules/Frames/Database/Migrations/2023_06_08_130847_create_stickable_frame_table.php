@@ -22,6 +22,7 @@ class CreateStickableFrameTable extends Migration
             $table->string('image', 250);
             $table->integer('order')->default(0);
             $table->string('status')->default('draft');
+            $table->decimal('price', 8, 2);
             $table->integer('created_by_id')->unsigned()->nullable();
             $table->integer('updated_by_id')->unsigned()->nullable();
             $table->softDeletes();
