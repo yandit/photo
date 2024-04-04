@@ -18,6 +18,12 @@ class CheckoutController extends Controller
         if(!count($cart->uploads)){
             return redirect()->route('upload.index', ['slug'=> $slug]);
         }
+
+        $price = $cart->frames_stickable->price;
+        $uploads = $cart->uploads->count();
+        $totalPrice = $price * $uploads;
+        $totalPrice = number_format($totalPrice, 0, ',', '.');
+        
         if($request->isMethod('post')){
             $postData = $request->all();
 
@@ -33,6 +39,6 @@ class CheckoutController extends Controller
             $cart->status = 'waiting-for-payment';
             $cart->save();
         }
-        return view('checkout.order-details', compact('slug', 'cart'));
+        return view('checkout.order-details', compact('slug', 'cart', 'totalPrice'));
     }
 }

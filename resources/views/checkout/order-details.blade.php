@@ -196,14 +196,14 @@
                         <div class="row item">
                             <div class="col-4 align-self-center"><img class="img-fluid" src="{{ route('getimage.crop', ['x'=> $cart->uploads->first()->x != null ? $cart->uploads->first()->x : 'null', 'y' => $cart->uploads->first()->y != null ? $cart->uploads->first()->y : 'null', 'w'=> $cart->uploads->first()->width, 'h'=> $cart->uploads->first()->height, 'path' => $cart->uploads->first()->image, 'source' => $cart->uploads->first()->source, 'disk'=> 'google']) }}"></div>
                             <div class="col-8">
-                                <div class="row"><b>Rp. 350.000</b></div>
+                                <div class="row"><b>Rp. {{$totalPrice}}</b></div>
                                 <div class="row text-muted">{{ $cart->frames_stickable->title }}</div>
                             </div>
                         </div>
                         <hr>
                         <div class="row lower">
                             <div class="col text-left">Subtotal</div>
-                            <div class="col text-right">Rp. 350.000</div>
+                            <div class="col text-right">Rp. {{$totalPrice}}</div>
                         </div>
                         <div class="row lower">
                             <div class="col text-left">Ongkir</div>
