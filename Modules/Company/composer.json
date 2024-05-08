@@ -1,0 +1,23 @@
+{
+    "name": "yudit/company",
+    "description": "",
+    "authors": [
+        {
+            "name": "Yudit",
+            "email": "wayanyuditya@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Company\\": ""
+        }
+    }
+}
