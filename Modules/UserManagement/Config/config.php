@@ -18,11 +18,11 @@ return [
             'type'=> 'superadmin'
         ],
         'admin' => [
-            'route'=> 'admin.index',
+            'route'=> 'customer.index',
             'role_slug'=> 'admin',
             'type'=> 'admin'
         ],
-        'customer' => [
+        'company' => [
             'route'=> 'customer.index',
             'role_slug'=> 'customer',
             'type'=> 'customer'
