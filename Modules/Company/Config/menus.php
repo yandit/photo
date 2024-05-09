@@ -4,8 +4,9 @@ $prefix = config('usermanagement.admin_prefix');
 return [
     [
 		'name' => 'Company',
-        'fa' => 'fa-user-plus',
+        'fa' => 'fa-building-o',
 		'permission' => 'company.index',         
+		'order'=> 2,
 		'path' => $prefix.'/company',
 
 	],

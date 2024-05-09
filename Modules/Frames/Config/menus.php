@@ -6,7 +6,7 @@
 			'name' => 'Frames',
 			'fa' => 'fa-crop',
 			'path' => $prefix.'/frames',
-			'order'=> 2,
+			'order'=> 5,
 			'subs' => [
 				[
 					'name' => 'Stickable',								

@@ -5,6 +5,7 @@ namespace Modules\UserManagement\Entities;
 use Cartalyst\Sentinel\Users\EloquentUser;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Modules\Company\Entities\Company;
 
 class User extends EloquentUser implements AuthenticatableContract
 {
@@ -41,13 +42,18 @@ class User extends EloquentUser implements AuthenticatableContract
             ->select('users.*','activations.completed')
             ->join('role_users', 'role_users.user_id', 'users.id')
             ->join('roles', 'roles.id', 'role_users.role_id')
-            ->join('activations', 'activations.user_id', 'users.id');
-            // ->whereNotIn('roles.slug', config('user.public'));
+            ->join('activations', 'activations.user_id', 'users.id')
+            ->whereIn('roles.name', ['admin']);
         return $query;
     }
     
     public function created_by()
     {
         return $this->belongsTo(self::class);
+    }
+
+    public function company()
+    {
+        return $this->hasOne(Company::class);
     }
 }

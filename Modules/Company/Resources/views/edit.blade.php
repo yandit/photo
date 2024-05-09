@@ -28,6 +28,14 @@
                     {!! Form::open(['route' => ['company.update', $company->id], 'method' => 'PUT', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'formCompany']) !!}
                     <div class="box-body">
 
+                        <div class="form-group {{ ($errors->first('email')) ? 'has-error' : '' }}">
+							<label for="femail">Email <span class="text-danger">*</span></label>
+							<input readonly type="text" class="form-control" id="femail" placeholder="Email" name="email" value="{{ (old('email')) ? old('email') : $company->user->email }}">
+							@if($errors->has('email'))										
+								<span class="help-block">{{ $errors->first('email') }}</span>
+							@endif
+						</div>
+
                         <div class="form-group {{ $errors->first('name') ? 'has-error' : '' }}">
                             <label for="fname">Company <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="fname" placeholder="Company" onkeyup="slugify(this,'#fslug')"
@@ -37,6 +45,22 @@
                                 <span class="help-block">{{ $errors->first('name') }}</span>
                             @endif
                         </div>
+
+						<div class="form-group {{ ($errors->first('phone')) ? 'has-error' : '' }}">
+							<label for="fphone">Phone</label>
+							<input type="number" class="form-control" id="fphone" placeholder="Phone" name="phone" value="{{ (old('phone')) ? old('phone') : $company->user->phone }}">
+							@if($errors->has('phone'))
+								<span class="help-block">{{ $errors->first('phone') }}</span>
+							@endif
+						</div>
+
+						<div class="form-group {{ ($errors->first('address')) ? 'has-error' : '' }}">
+							<label for="fphone">Address</label>
+							<textarea name="address" class="form-control"  id="fphone" rows="5">{{ (old('address')) ? old('address') : $company->user->address }}</textarea>
+							@if($errors->has('address'))
+								<span class="help-block">{{ $errors->first('address') }}</span>
+							@endif
+						</div>
 
                         <div class="form-group {{ $errors->first('status') ? 'has-error' : '' }}">
                             <label for="fstatus">Status</label>

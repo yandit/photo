@@ -6,7 +6,7 @@
 			'name' => 'Google Drive',
 			'fa' => 'fa-google',
 			'path' => $prefix.'/google-drive',
-			'order'=> 2,
+			'order'=> 4,
 			'subs' => [
 				[
 					'name' => 'Disk',								

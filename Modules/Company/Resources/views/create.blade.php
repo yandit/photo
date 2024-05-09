@@ -26,6 +26,13 @@
                     <!-- /.box-header -->
                     
                     <div class="box-body">
+                        <div class="form-group {{ ($errors->first('email')) ? 'has-error' : '' }}">
+							<label for="femail">Email <span class="text-danger">*</span></label>
+							<input type="text" class="form-control" id="femail" placeholder="Email" name="email" value="{{ old('email') }}" required data-parsley-trigger="keyup focusout">
+							@if($errors->has('email'))										
+								<span class="help-block">{{ $errors->first('email') }}</span>
+							@endif
+						</div>
 
                         <div class="form-group {{ $errors->first('name') ? 'has-error' : '' }}">
                             <label for="fname">Name <span class="text-danger">*</span></label>
@@ -36,6 +43,22 @@
                                 <span class="help-block">{{ $errors->first('name') }}</span>
                             @endif
                         </div>          
+
+                        <div class="form-group {{ ($errors->first('phone')) ? 'has-error' : '' }}">
+							<label for="fphone">Phone</label>
+							<input type="number" class="form-control" id="fphone" placeholder="Phone" name="phone" value="{{ old('phone') }}">
+							@if($errors->has('phone'))
+								<span class="help-block">{{ $errors->first('phone') }}</span>
+							@endif
+						</div>
+
+						<div class="form-group {{ ($errors->first('address')) ? 'has-error' : '' }}">
+							<label for="fphone">Address</label>
+							<textarea name="address" class="form-control"  id="fphone" rows="5">{{ old('address') }}</textarea>
+							@if($errors->has('address'))
+								<span class="help-block">{{ $errors->first('address') }}</span>
+							@endif
+						</div>
 
                         <div class="form-group {{ $errors->first('status') ? 'has-error' : '' }}">
                             <label for="fstatus">Status</label>

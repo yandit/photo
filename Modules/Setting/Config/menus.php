@@ -6,6 +6,7 @@ return [
 		'name' => 'Setting',
         'fa' => 'fa-gear',                
 		'path' => $prefix.'/setting',
+		'order'=> 1,
 		'subs' => [
 			[
 				'name' => 'General',

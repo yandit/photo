@@ -5,6 +5,7 @@ return [
     'delete_success' => 'Delete record succeed',
     'create_success' => 'Create record succeed',
     'update_success' => 'Update record succeed',
+    'update_failed' => 'Update record failed',
 
     'activation_not_found' => 'Activation not found',
     'activation_already_active' => 'Account already active',

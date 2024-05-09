@@ -19,6 +19,7 @@ class CreateCompaniesTable extends Migration
             $table->string('status')->default('enable');
             $table->integer('created_by_id')->unsigned()->nullable();
             $table->integer('updated_by_id')->unsigned()->nullable();
+            $table->foreignId('user_id')->onDelete('cascade')->nullable();
             $table->timestamps();
         });
     }

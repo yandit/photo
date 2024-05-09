@@ -7,6 +7,7 @@ return [
         'fa' => 'fa-user-plus',
 		'permission' => 'customer.index',         
 		'path' => $prefix.'/customer',
+		'order'=> 3,
 
 	],
 ];

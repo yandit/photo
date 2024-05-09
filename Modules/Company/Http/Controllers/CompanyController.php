@@ -2,9 +2,14 @@
 
 namespace Modules\Company\Http\Controllers;
 
+use Activation;
+use Sentinel;
+use Illuminate\Support\Facades\Mail;
+use Modules\UserManagement\Emails\AdminActivation;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Modules\Company\Entities\Company;
 use Modules\Company\Transformers\CompanyResource;
 use Modules\Company\Http\Requests\CompanyRequest;
@@ -95,14 +100,65 @@ class CompanyController extends Controller
      */
     public function store(CompanyRequest $request)
     {
-        $post = $request->all();
-        Company::create([
-            'name' => $post['name'],
-            'status' => $post['status'],
-            'created_by_id' => loggedInUser('id')
-        ]);
-        $request->session()->flash('message', __('company::messages.create_success'));
-        return redirect()->route('company.index');
+        DB::beginTransaction();
+
+        try {
+            $post = $request->all();
+
+            $company = Company::create([
+                'name' => $post['name'],
+                'status' => $post['status'],
+                'created_by_id' => loggedInUser('id')
+            ]);
+
+            // company role
+            $role = Sentinel::findRoleById(3);
+
+            if($role){
+                $credentials = [
+                    'email' => $post['email'],
+                    'password' => time(),
+                    'name' => $post['name'],
+                    'phone' => !empty($post['phone']) ? $post['phone'] : '',
+                    'address' => !empty($post['address']) ? $post['address'] : '',                
+                    'created_by_id' => loggedInUser('id')
+                ];
+                
+                $user = Sentinel::register($credentials);
+                if($user){
+
+                    $user->name = $post['name'];
+                    $user->phone = $post['phone'];
+                    $user->address = $post['address'];
+                    $user->save();
+
+                    $company->user_id = $user->id;
+                    $company->save();
+
+                    $role->users()->attach($user);
+                    
+                    // sentinel user activation
+                    $activation = Activation::create($user);
+
+                    // Send Email                
+                    $params = [
+                        'name' => $user->name,
+                        'url' => route('activate.form', ['code' => $activation->code]),
+                    ];
+
+                    Mail::to($user)->send(new AdminActivation($params));
+                    $request->session()->flash('message', __('usermanagement::admin.create_success'));
+                }
+            }
+
+            DB::commit();
+            
+            $request->session()->flash('message', __('company::messages.create_success'));
+            return redirect()->route('company.index');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back();
+        }
     }
 
     /**
@@ -133,13 +189,28 @@ class CompanyController extends Controller
      */
     public function update(Company $company, CompanyRequest $request)
     {
-        $post = $request->all();
-        $company->name = $post['name'];
-        $company->status = $post['status'];
-        $company->updated_by_id = loggedInUser('id');
-        $company->save();
+        DB::beginTransaction();
+        try {
+            $post = $request->all();
+            $company->name = $post['name'];
+            $company->status = $post['status'];
+            $company->updated_by_id = loggedInUser('id');
+            $company->save();
 
-        $request->session()->flash('message', __('company::messages.update_success'));
+            $user = $company->user;
+            $user->name = $post['name'];
+            $user->phone = !empty($post['phone']) ? $post['phone'] : '';
+            $user->address = !empty($post['address']) ? $post['address'] : '';            
+            $user->updated_by_id = loggedInUser('id');
+            $user->save();
+            $request->session()->flash('message', __('company::messages.update_success'));
+
+            DB::commit();
+        }  catch (\Exception $e) {
+            DB::rollback();
+            $request->session()->flash('error', __('company::messages.update_failed'));
+        }
+
         return redirect()->route('company.index');
     }
 
@@ -150,7 +221,14 @@ class CompanyController extends Controller
      */
     public function delete(Company $company,)
     {
-        $company->delete();
+        DB::beginTransaction();
+        try {
+            $company->delete();
+            $company->user->delete();
+            DB::commit();
+        }  catch (\Exception $e) {
+            DB::rollback();
+        }
         return redirect()->route('company.index');
     }
 }

@@ -15,7 +15,8 @@ class CompanyRequest extends FormRequest
     {
         $id = @$this->route('company')->id;
         $appends = [];
-        return array_merge([            
+        return array_merge([   
+            'email' => 'required|email|max:50|unique:users,email,'. @$this->company->user->id,         
             'name' => 'required|unique:companies,name,' . $id,
             'status' => 'required:in:enable,disable',
         ], $appends);

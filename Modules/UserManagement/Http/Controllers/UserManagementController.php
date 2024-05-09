@@ -100,7 +100,7 @@ class UserManagementController extends Controller
     public function create()
     {
         $roleModel = Sentinel::getRoleRepository()->createModel();
-        $roles = $roleModel->get();
+        $roles = $roleModel->whereIn('slug', ['admin'])->get();
 
         return view('usermanagement::admin.create', compact('roles'));
     }
@@ -168,7 +168,7 @@ class UserManagementController extends Controller
     public function edit(User $user)
     {
         $roleModel = Sentinel::getRoleRepository()->createModel();
-        $roles = $roleModel->get();
+        $roles = $roleModel->whereIn('slug', ['admin'])->get();
         return view('usermanagement::admin.edit', compact('user', 'roles'));
     }
 
@@ -243,7 +243,10 @@ class UserManagementController extends Controller
                     ->first();
 
                 setMenuSession($role);
-                return redirect()->route($roleData['route']);
+                if($roleData){
+                    return redirect()->route($roleData['route']);
+                }
+                return redirect()->route('admin.index');
             }            
             $message = __('usermanagement::admin.auth_failed');
         }catch(\Cartalyst\Sentinel\Checkpoints\NotActivatedException $e){

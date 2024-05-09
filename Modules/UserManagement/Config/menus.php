@@ -6,7 +6,7 @@ return [
 		'name' => 'User Management',
 		'fa' => 'fa-users',
 		'path' => $prefix.'/usermanagement',
-        'order'=> 2,
+        'order'=> 1,
 		'subs' => [
 			[
 				'name' => 'Role',								
