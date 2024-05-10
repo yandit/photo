@@ -16,7 +16,17 @@ return [
         'superadmin' => [
             'route'=> 'admin.index',
             'role_slug'=> 'superadmin',
+            'type'=> 'superadmin'
+        ],
+        'admin' => [
+            'route'=> 'customer.index',
+            'role_slug'=> 'admin',
             'type'=> 'admin'
+        ],
+        'company' => [
+            'route'=> 'customer.index',
+            'role_slug'=> 'company',
+            'type'=> 'company'
         ]
     ],
     'middleware' => [
