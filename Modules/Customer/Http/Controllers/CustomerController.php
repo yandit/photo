@@ -38,26 +38,30 @@ class CustomerController extends Controller
             $name = $allGet['name'];
             $status = $allGet['status'];
 
-            $faqModel = Customer::query();
+            $model = Customer::query();
+            $company = loggedInUser('company');
+            if($company){
+                $model = $model->where('company_id', $company->id);
+            }
             if ($columnIndex == 0) {
-                $faqModel->orderBy('id', $allGet['order'][0]['dir']);
+                $model->orderBy('id', $allGet['order'][0]['dir']);
             } else {
-                $faqModel->orderBy($allGet['columns'][$columnIndex]['data'], $allGet['order'][0]['dir']);
+                $model->orderBy($allGet['columns'][$columnIndex]['data'], $allGet['order'][0]['dir']);
             }
             
             if($name){
                 $likeSearch = "%{$name}%";
-                $faqModel->whereRaw(' ( name like ? ) ', [$likeSearch]);
+                $model->whereRaw(' ( name like ? ) ', [$likeSearch]);
             }
             if($status){
-                $faqModel->where('status', $status);
+                $model->where('status', $status);
             }
             if ($startDate && $endDate) {
-                $faqModel->whereRaw('DATE(customers.created_at) BETWEEN ? AND ?', [$startDate, $endDate]);
+                $model->whereRaw('DATE(customers.created_at) BETWEEN ? AND ?', [$startDate, $endDate]);
             }
 
-            $countTable = $faqModel->count();
-            $preData = $faqModel
+            $countTable = $model->count();
+            $preData = $model
                 ->limit($allGet['length'])
                 ->offset($allGet['start'])
                 ->get();
@@ -102,7 +106,7 @@ class CustomerController extends Controller
         Customer::create([
             'name' => $post['name'],
             'slug' => $post['slug'],
-            'company_id' => $post['company'],
+            'company_id' => @$post['company'] ?? loggedInUser('company')->id,
             'status' => $post['status'],
             'created_by_id' => loggedInUser('id')
         ]);
@@ -143,7 +147,7 @@ class CustomerController extends Controller
         $customer->name = $post['name'];
         $customer->slug = $post['slug'];
         $customer->status = $post['status'];
-        $company_id = @$post['company'] || loggedInUser('company')->id;
+        $company_id = @$post['company'] ?? loggedInUser('company')->id;
         $customer->company_id = $company_id;
         $customer->updated_by_id = loggedInUser('id');
         $customer->save();
