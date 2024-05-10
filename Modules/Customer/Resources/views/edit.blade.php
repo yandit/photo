@@ -27,6 +27,24 @@
                     <!-- form start -->
                     {!! Form::open(['route' => ['customer.update', $customer->id], 'method' => 'PUT', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'formCustomer']) !!}
                     <div class="box-body">
+                        @if(in_array(loggedInUser('role')->slug, ['superadmin', 'admin']))
+                        <div class="form-group {{ $errors->first('company') ? 'has-error' : '' }}">
+                            <label for="fcompany">Company <span class="text-danger">*</span></label>
+                            <select class="form-control select2" name="company" id="fcompany" required
+                                data-parsley-trigger="keyup focusout">
+                                <option value=""></option>
+                                @foreach ($companies as $company)
+                                    @php
+                                        $selected = $company['id'] == old('company', $customer->company_id) ? 'selected' : '';
+                                    @endphp
+                                    <option value="{{ $company['id'] }}" {{ $selected }}>{{ $company['name'] }}</option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('company'))
+                                <span class="help-block">{{ $errors->first('company') }}</span>
+                            @endif
+                        </div>
+                        @endif
 
                         <div class="form-group {{ $errors->first('name') ? 'has-error' : '' }}">
                             <label for="fname">Customer <span class="text-danger">*</span></label>
@@ -49,7 +67,7 @@
 
                         <div class="form-group {{ $errors->first('status') ? 'has-error' : '' }}">
                             <label for="fstatus">Status</label>
-                            <select class="form-control" name="status" id="fstatus" required
+                            <select class="form-control select2" name="status" id="fstatus" required
                                 data-parsley-trigger="keyup focusout">
                                 <option value="">-- Select Option --</option>
                                 @foreach (config('customer.enable_disable') as $status)

@@ -9,6 +9,8 @@ use Modules\Customer\Entities\Customer;
 use Modules\Customer\Transformers\CustomerResource;
 use Modules\Customer\Http\Requests\CustomerRequest;
 
+use Modules\Company\Entities\Company;
+
 class CustomerController extends Controller
 {
     /**
@@ -85,7 +87,8 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('customer::create');
+        $companies = Company::all();
+        return view('customer::create', compact('companies'));
     }
 
     /**
@@ -99,6 +102,7 @@ class CustomerController extends Controller
         Customer::create([
             'name' => $post['name'],
             'slug' => $post['slug'],
+            'company_id' => $post['company'],
             'status' => $post['status'],
             'created_by_id' => loggedInUser('id')
         ]);
@@ -123,7 +127,8 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        return view('customer::edit', compact('customer'));
+        $companies = Company::all();
+        return view('customer::edit', compact('customer', 'companies'));
     }
 
     /**
@@ -138,6 +143,8 @@ class CustomerController extends Controller
         $customer->name = $post['name'];
         $customer->slug = $post['slug'];
         $customer->status = $post['status'];
+        $company_id = @$post['company'] || loggedInUser('company')->id;
+        $customer->company_id = $company_id;
         $customer->updated_by_id = loggedInUser('id');
         $customer->save();
 

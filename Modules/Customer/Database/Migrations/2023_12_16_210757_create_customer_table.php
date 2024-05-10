@@ -19,6 +19,7 @@ class CreateCustomerTable extends Migration
             $table->string('name');
             $table->string('slug');
             $table->string('status')->default('enable');
+            $table->foreignId('company_id')->onDelete('restrict');
             $table->integer('created_by_id')->unsigned()->nullable();
             $table->integer('updated_by_id')->unsigned()->nullable();
 

@@ -27,7 +27,7 @@ class SeedRoleUserTableSeeder extends Seeder
         ]);  
 
         DB::table('roles')->insert([
-            'slug' => 'Admin',
+            'slug' => 'admin',
             'name' => 'Admin',
             'permissions' => '{"setting.create":true,"setting.view":true,"setting.edit":true,"setting.delete":true,"googledrivegallery.index":true,"googledrivegallery.edit":true,"googledrivegallery.delete":true,"googledrivegallery.create":true,"googledrivedisk.create":true,"googledrivedisk.index":true,"googledrivedisk.edit":true,"googledrivedisk.delete":true,"stickableframe.create":true,"stickableframe.index":true,"stickableframe.edit":true,"stickableframe.delete":true,"faq.create":true,"faq.index":true,"faq.edit":true,"faq.delete":true,"customer.create":true,"customer.index":true,"customer.edit":true,"customer.delete":true,"company.create":true,"company.index":true,"company.edit":true,"company.delete":true,"setting.store":true,"setting.update":true,"googledrivegallery.list":true,"googledrivegallery.update":true,"googledrivegallery.store":true,"googledrivedisk.store":true,"googledrivedisk.list":true,"googledrivedisk.update":true,"stickableframe.store":true,"stickableframe.list":true,"stickableframe.update":true,"faq.store":true,"faq.list":true,"faq.update":true,"customer.store":true,"customer.list":true,"customer.update":true,"company.store":true,"company.list":true,"company.update":true}',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),

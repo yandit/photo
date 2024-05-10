@@ -25,7 +25,7 @@ return [
         'company' => [
             'route'=> 'customer.index',
             'role_slug'=> 'customer',
-            'type'=> 'customer'
+            'type'=> 'company'
         ]
     ],
     'middleware' => [
