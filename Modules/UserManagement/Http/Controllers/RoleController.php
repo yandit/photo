@@ -111,10 +111,15 @@ class RoleController extends Controller
 	}
     
     public function delete(Role $role, Request $request){
-        $role->delete();
-
-        $request->session()->flash('message', __('usermanagement::admin.delete_success'));
-        return redirect()->route('role.index');
+        $success = true;
+        try {
+            $role->delete();
+        } catch (\Exception $e) {
+            $success = false;
+        }
+        return response()->json([
+            'success'=> $success
+        ]);
     
     }
 }

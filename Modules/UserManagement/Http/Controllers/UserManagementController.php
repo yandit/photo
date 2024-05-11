@@ -211,9 +211,15 @@ class UserManagementController extends Controller
      */
     public function delete(Request $request, User $user)
     {
-        $user->delete();
-        $request->session()->flash('message', __('usermanagement::admin.delete_success'));
-        return redirect()->route('admin.index');
+        $success = true;
+        try {
+            $user->delete();
+        } catch (\Exception $e) {
+            $success = false;
+        }
+        return response()->json([
+            'success'=> $success
+        ]);
     }
 
     public function login()

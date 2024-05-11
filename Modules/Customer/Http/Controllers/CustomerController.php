@@ -163,7 +163,12 @@ class CustomerController extends Controller
      */
     public function delete(Customer $customer,)
     {
-        $customer->delete();
-        return redirect()->route('customer.index');
+        $success = true;
+        try {
+            $customer->delete();
+        } catch (\Exception $e) {
+            $success = false;
+        }
+        return response()->json(['success'=> $success]);
     }
 }

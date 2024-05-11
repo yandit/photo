@@ -232,6 +232,5 @@ class CompanyController extends Controller
             DB::rollback();
         }
         return response()->json(['success'=> $success]);
-        return redirect()->route('company.index');
     }
 }

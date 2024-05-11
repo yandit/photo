@@ -84,18 +84,25 @@ class SettingController extends Controller
 	}
     
     public function delete($id, Request $request){
-        $setting = SettingModel::find($id);
-        if(!$setting){
-            abort(404);
-        }else{
-            if($setting->is_deletable == 'no'){
-                $request->session()->flash('error', 'Cannot delete default app value');
+        $success = true;
+        try {
+            $setting = SettingModel::find($id);
+            if(!$setting){
+                abort(404);
+                $seccess = false;
             }else{
-                $setting->delete();
-                $request->session()->flash('message', __('setting::messages.delete_success'));
+                if($setting->is_deletable == 'no'){
+                    $seccess = false;
+                }else{
+                    $setting->delete();
+                }
+                
             }
-            
-            return redirect()->route('setting.view');
+        } catch (\Exception $e) {
+            $success = false;
         }
+        return response()->json([
+            'success'=> $success
+        ]);
     }
 }

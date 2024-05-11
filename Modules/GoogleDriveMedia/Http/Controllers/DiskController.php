@@ -156,7 +156,14 @@ class DiskController extends Controller
      */
     public function delete(Disk $disk, Request $request)
     {
-        $disk->delete();
-        return redirect()->route('googledrivedisk.index');
+        $success = true;
+        try {
+            $disk->delete();
+        } catch (\Exception $e) {
+            $success = false;
+        }
+        return response()->json([
+            'success'=> $success
+        ]);
     }
 }

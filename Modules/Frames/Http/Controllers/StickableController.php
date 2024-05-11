@@ -141,9 +141,14 @@ class StickableController extends Controller
 
     public function delete(StickableFrame $stickable, Request $request)
     {
-        
-        $stickable->delete();
-        // $request->session()->flash('message', __('faq::messages.delete_success'));
-        return redirect()->route('stickableframe.index');
+        $success = true;
+        try {
+            $stickable->delete();
+        } catch (\Exception $e) {
+            $success = false;
+        }
+        return response()->json([
+            'success'=> $success
+        ]);
     }
 }

@@ -118,9 +118,15 @@ class FaqController extends Controller
 
     public function delete(Faq $faq, Request $request)
     {
-        
-        $faq->delete();
-        // $request->session()->flash('message', __('faq::messages.delete_success'));
-        return redirect()->route('faq.index');
+
+        $success = true;
+        try {
+            $faq->delete();
+        } catch (\Exception $e) {
+            $success = false;
+        }
+        return response()->json([
+            'success'=> $success
+        ]);
     }
 }
