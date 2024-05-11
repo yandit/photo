@@ -40,24 +40,28 @@ class CredentialController extends Controller
             $endDate = $allGet['endDate'];
             $name = $allGet['name'];
 
-            $customerModel = Customer::query();
-            $customerModel = $customerModel->where('status', 'enable');
+            $model = Customer::query();
+            $company = loggedInUser('company');
+            if($company){
+                $model = $model->where(['company_id'=> $company->id]);
+            }
+            $model = $model->where('status', 'enable');
             if ($columnIndex == 0) {
-                $customerModel->orderBy('id', $allGet['order'][0]['dir']);
+                $model->orderBy('id', $allGet['order'][0]['dir']);
             } else {
-                $customerModel->orderBy($allGet['columns'][$columnIndex]['data'], $allGet['order'][0]['dir']);
+                $model->orderBy($allGet['columns'][$columnIndex]['data'], $allGet['order'][0]['dir']);
             }
             
             if($name){
                 $likeSearch = "%{$name}%";
-                $customerModel->whereRaw(' ( name like ? ) ', [$likeSearch]);
+                $model->whereRaw(' ( name like ? ) ', [$likeSearch]);
             }
             if ($startDate && $endDate) {
-                $customerModel->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$startDate, $endDate]);
+                $model->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$startDate, $endDate]);
             }
 
-            $countTable = $customerModel->count();
-            $preData = $customerModel
+            $countTable = $model->count();
+            $preData = $model
                 ->limit($allGet['length'])
                 ->offset($allGet['start'])
                 ->get();
@@ -118,7 +122,11 @@ class CredentialController extends Controller
     public function edit(Customer $customer)
     {
         $credential = Credential::where('customer_id', $customer->id)->first();
+        $company = loggedInUser('company');
         $disks = Disk::all();
+        if($company){
+            $disks = Disk::where(['company_id'=> $company->id])->orWhere('type', 'public')->get();
+        }
         return view('googledrivemedia::credential.edit', compact('customer', 'credential', 'disks'));
     }
 
