@@ -37,6 +37,10 @@ class GalleryController extends Controller
 
             $credentialModel = Credential::query();
             $credentialModel->join('customers', 'credentials.customer_id', '=', 'customers.id');
+            $company = loggedInUser('company');
+            if($company){
+                $credentialModel = $credentialModel->where(['company_id'=> $company->id]);
+            }
             if ($columnIndex == 0) {
                 $credentialModel->orderBy('credentials.id', $allGet['order'][0]['dir']);
             } else {
