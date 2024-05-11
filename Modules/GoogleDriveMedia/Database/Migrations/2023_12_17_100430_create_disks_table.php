@@ -22,8 +22,9 @@ class CreateDisksTable extends Migration
             $table->string('disk_name');
             $table->string('email')->nullable();
             $table->string('password')->nullable();
-            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('company_id')->nullable();
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('restrict');
+            $table->string('type');
 
             $table->integer('created_by_id')->unsigned()->nullable();
             $table->integer('updated_by_id')->unsigned()->nullable();

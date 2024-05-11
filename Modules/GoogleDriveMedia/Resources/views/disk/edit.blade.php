@@ -25,11 +25,29 @@
                     {!! Form::open(['route' => ['googledrivedisk.update', $disk->id], 'method' => 'PUT', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'formGoogleDriveMedia']) !!}
                     <div class="box-body">
                         @if(in_array(loggedInUser('role')->slug, ['superadmin', 'admin']))
-                        <div class="form-group {{ $errors->first('company') ? 'has-error' : '' }}">
-                            <label for="fcompany">Company <span class="text-danger">*</span></label>
-                            <select class="form-control" name="company" id="fcompany" required
+                        <div class="form-group {{ $errors->first('type') ? 'has-error' : '' }}">
+                            <label for="ftype">Type <span class="text-danger">*</span></label>
+                            <select class="form-control" name="type" id="ftype" required
                                 data-parsley-trigger="keyup focusout">
-                                <option value=""></option>
+                                <option value="">-- Select Option --</option>
+                                @foreach (config('googledrivemedia.disk_types') as $type)
+                                    @php
+                                        $selected = $type['value'] == old('type', $disk->type) ? 'selected' : '';
+                                    @endphp
+                                    <option value="{{ $type['value'] }}" {{ $selected }}>{{ $type['name'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('type'))
+                                <span class="help-block">{{ $errors->first('type') }}</span>
+                            @endif
+                        </div>
+
+                        <div class="form-group {{ $errors->first('company') ? 'has-error' : '' }} {{old('type', $disk->type) == 'public' ? 'hidden' : ''}}" id="company">
+                            <label for="fcompany">Company <span class="text-danger">*</span></label>
+                            <select class="form-control" name="company" id="fcompany"
+                                data-parsley-trigger="keyup focusout">
+                                <option value="">-- Select Items --</option>
                                 @foreach ($companies as $company)
                                     @php
                                         $selected = $company['id'] == old('company', $disk->company_id) ? 'selected' : '';
@@ -159,7 +177,20 @@
     <script>
         $(document).ready(function(){
             handleShowHidePassowrd()
+            handleType()
         })
+
+        const handleType = function(){
+            $('#ftype').change(function(){
+                const val = $(this).val()
+                if(val == 'private'){
+                    $('#company').removeClass('hidden')
+                }else{
+                    $('#company').find('#fcompany').val('').change()
+                    $('#company').addClass('hidden')
+                }
+            })
+        }
 
         const handleShowHidePassowrd = function(){
             $("#fpassword").click(function () {

@@ -14,6 +14,7 @@ class Disk extends Model
         'email',
         'password',
         'company_id',
+        'type',
         'client_secret',
         'refresh_token',
         'disk_name',

@@ -41,7 +41,7 @@ class DiskController extends Controller
             $diskModel = Disk::query();
             $company = loggedInUser('company');
             if($company){
-                $diskModel = $diskModel->where('company_id', $company->id);
+                $diskModel = $diskModel->where(['company_id'=> $company->id, 'type'=> 'private']);
             }
             
             if ($columnIndex == 0) {
@@ -104,7 +104,8 @@ class DiskController extends Controller
         Disk::create([
             'disk_name' => $post['disk_name'],
             'email' => $post['email'],
-            'company_id' => @$post['company'] ?? loggedInUser('company')->id,
+            'company_id' => @$post['company'] ?? @loggedInUser('company')->id,
+            'type' => @$post['type'] ?? 'private',
             'password' => $post['password'],
             'client_id' => $post['client_id'],
             'client_secret' => $post['client_secret'],
@@ -148,8 +149,10 @@ class DiskController extends Controller
         $disk->disk_name = $post['disk_name'];
         $disk->email = $post['email'];
         $disk->password = $post['password'];
-        $company_id = @$post['company'] ?? loggedInUser('company')->id;
+        $company_id = @$post['company'] ?? @loggedInUser('company')->id;
         $disk->company_id = $company_id;
+        $type = @$post['type'] ?? 'private';
+        $disk->type = $type;
         $disk->client_id = $post['client_id'];
         $disk->client_secret = $post['client_secret'];
         $disk->refresh_token = $post['refresh_token'];

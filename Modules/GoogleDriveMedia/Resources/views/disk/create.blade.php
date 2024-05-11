@@ -27,7 +27,26 @@
                     
                     <div class="box-body">
                         @if(in_array(loggedInUser('role')->slug, ['superadmin', 'admin']))
-                        <div class="form-group {{ $errors->first('company') ? 'has-error' : '' }}">
+
+                        <div class="form-group {{ $errors->first('type') ? 'has-error' : '' }}">
+                            <label for="ftype">Type</label>
+                            <select class="form-control" name="type" id="ftype"
+                                data-parsley-trigger="keyup focusout">
+                                <option value="">-- Select Option --</option>
+                                @foreach (config('googledrivemedia.disk_types') as $type)
+                                    @php
+                                        $selected = $type['value'] == old('type') ? 'selected' : '';
+                                    @endphp
+                                    <option value="{{ $type['value'] }}" {{ $selected }}>{{ $type['name'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('type'))
+                                <span class="help-block">{{ $errors->first('type') }}</span>
+                            @endif
+                        </div>
+
+                        <div class="form-group {{ $errors->first('company') ? 'has-error' : '' }} {{old('type', 'public') == 'public' ? 'hidden' : ''}}" id="company">
                             <label for="fcompany">Company <span class="text-danger">*</span></label>
                             <select class="form-control" name="company" id="fcompany" required
                                 data-parsley-trigger="keyup focusout">
@@ -154,7 +173,20 @@
     <script>
         $(document).ready(function(){
             handleShowHidePassowrd()
+            handleType()
         })
+
+        const handleType = function(){
+            $('#ftype').change(function(){
+                const val = $(this).val()
+                if(val == 'private'){
+                    $('#company').removeClass('hidden')
+                }else{
+                    $('#company').find('#fcompany').val('').change()
+                    $('#company').addClass('hidden')
+                }
+            })
+        }
 
         const handleShowHidePassowrd = function(){
             $("#fpassword").click(function () {
