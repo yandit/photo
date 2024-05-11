@@ -15,7 +15,6 @@ class CustomerRequest extends FormRequest
     {
         $id = @$this->route('customer')->id;
         $appends = [];
-        // dd(!loggedInUser('company'));
         if(!loggedInUser('company')){
             $appends = ['company' => 'required'];
         }

@@ -26,11 +26,30 @@
                     <!-- /.box-header -->
                     
                     <div class="box-body">
+                        @if(in_array(loggedInUser('role')->slug, ['superadmin', 'admin']))
+                        <div class="form-group {{ $errors->first('company') ? 'has-error' : '' }}">
+                            <label for="fcompany">Company <span class="text-danger">*</span></label>
+                            <select class="form-control" name="company" id="fcompany" required
+                                data-parsley-trigger="keyup focusout">
+                                <option value="">-- Select Items --</option>
+                                @foreach ($companies as $company)
+                                    @php
+                                        $selected = $company['id'] == old('company') ? 'selected' : '';
+                                    @endphp
+                                    <option value="{{ $company['id'] }}" {{ $selected }}>{{ $company['name'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('company'))
+                                <span class="help-block">{{ $errors->first('company') }}</span>
+                            @endif
+                        </div>
+                        @endif
 
                         <div class="form-group {{ $errors->first('email') ? 'has-error' : '' }}">
-                            <label for="femail">Email <span class="text-danger">*</span></label>
+                            <label for="femail">Email</label>
                             <input type="text" class="form-control" id="femail" placeholder="Eamil"
-                                name="email" value="{{ old('email') }}" required
+                                name="email" value="{{ old('email') }}"
                                 data-parsley-trigger="keyup focusout">
                             @if ($errors->has('email'))
                                 <span class="help-block">{{ $errors->first('email') }}</span>
@@ -38,9 +57,9 @@
                         </div>
 
                         <div class="form-group {{ $errors->first('password') ? 'has-error' : '' }}">
-                            <label for="fpassword">Password <span class="text-danger">*</span></label>
+                            <label for="fpassword">Password</label>
                             <input type="password" class="form-control" id="fpassword" placeholder="Password"
-                                name="password" value="{{ old('password') }}" required
+                                name="password" value="{{ old('password') }}"
                                 data-parsley-trigger="keyup focusout">
                             @if ($errors->has('password'))
                                 <span class="help-block">{{ $errors->first('password') }}</span>

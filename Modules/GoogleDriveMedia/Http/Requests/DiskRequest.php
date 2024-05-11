@@ -15,9 +15,10 @@ class DiskRequest extends FormRequest
     {
         $id = @$this->route('disk')->id;
         $appends = [];
+        if(!loggedInUser('company')){
+            $appends = ['company' => 'required'];
+        }
         return array_merge([            
-            'email' => 'required',
-            'password' => 'required',
             'disk_name' => 'required|unique:disks,disk_name,'.$id,
             'client_id' => 'required|unique:disks,client_id,'.$id,
             'client_secret' => 'required|unique:disks,client_secret,'.$id,

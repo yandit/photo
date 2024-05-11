@@ -10,6 +10,8 @@ use Modules\GoogleDriveMedia\Entities\Disk;
 use Modules\GoogleDriveMedia\Transformers\DiskResource;
 use Modules\GoogleDriveMedia\Http\Requests\DiskRequest;
 
+use Modules\Company\Entities\Company;
+
 class DiskController extends Controller
 {
     /**
@@ -37,6 +39,10 @@ class DiskController extends Controller
             $disk_name = $allGet['disk_name'];
 
             $diskModel = Disk::query();
+            $company = loggedInUser('company');
+            if($company){
+                $diskModel = $diskModel->where('company_id', $company->id);
+            }
             
             if ($columnIndex == 0) {
                 $diskModel->orderBy('id', $allGet['order'][0]['dir']);
@@ -83,7 +89,8 @@ class DiskController extends Controller
      */
     public function create()
     {
-        return view('googledrivemedia::disk.create');
+        $companies = Company::all();
+        return view('googledrivemedia::disk.create', compact('companies'));
     }
 
     /**
@@ -97,6 +104,7 @@ class DiskController extends Controller
         Disk::create([
             'disk_name' => $post['disk_name'],
             'email' => $post['email'],
+            'company_id' => @$post['company'] ?? loggedInUser('company')->id,
             'password' => $post['password'],
             'client_id' => $post['client_id'],
             'client_secret' => $post['client_secret'],
@@ -124,7 +132,8 @@ class DiskController extends Controller
      */
     public function edit(Disk $disk)
     {
-        return view('googledrivemedia::disk.edit', compact('disk'));
+        $companies = Company::all();
+        return view('googledrivemedia::disk.edit', compact('disk', 'companies'));
     }
 
     /**
@@ -139,6 +148,8 @@ class DiskController extends Controller
         $disk->disk_name = $post['disk_name'];
         $disk->email = $post['email'];
         $disk->password = $post['password'];
+        $company_id = @$post['company'] ?? loggedInUser('company')->id;
+        $disk->company_id = $company_id;
         $disk->client_id = $post['client_id'];
         $disk->client_secret = $post['client_secret'];
         $disk->refresh_token = $post['refresh_token'];
