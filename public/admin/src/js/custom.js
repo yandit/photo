@@ -256,10 +256,18 @@ function deleteItem(redirect, datatable) {
             _method: 'DELETE'
         },
         success: function(response) {
+            let title = 'Deleted!'
+            let message = 'The item has been deleted.'
+            let icon = 'success'
+            if(!response.success){
+                title = 'Error!'
+                message = 'The item cannot be deleted!'
+                icon = 'error'
+            }
             Swal.fire({
-                title: 'Deleted!',
-                text: 'The item has been deleted.',
-                icon: 'success'
+                title: title,
+                text: message,
+                icon: icon
             }).then(() => {
                 if(datatable){
                     datatable.draw()

@@ -222,13 +222,16 @@ class CompanyController extends Controller
     public function delete(Company $company,)
     {
         DB::beginTransaction();
+        $success = true; 
         try {
             $company->delete();
             $company->user->delete();
             DB::commit();
         }  catch (\Exception $e) {
+            $success = false;
             DB::rollback();
         }
+        return response()->json(['success'=> $success]);
         return redirect()->route('company.index');
     }
 }

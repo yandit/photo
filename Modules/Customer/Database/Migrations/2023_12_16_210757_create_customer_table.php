@@ -16,10 +16,11 @@ class CreateCustomerTable extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
 
+            $table->unsignedBigInteger('company_id');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('restrict');
             $table->string('name');
             $table->string('slug');
             $table->string('status')->default('enable');
-            $table->foreignId('company_id')->onDelete('restrict');
             $table->integer('created_by_id')->unsigned()->nullable();
             $table->integer('updated_by_id')->unsigned()->nullable();
 
