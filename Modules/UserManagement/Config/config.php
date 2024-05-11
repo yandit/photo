@@ -2,12 +2,13 @@
 
 return [
     'name' => 'UserManagement',
-    'admin_prefix' => 'admin',
+    'admin_prefix' => 'backend',
 
     // exception for middleware checking
     'permission_exceptions' => [
         'admin.profile',
-        'admin.profile_update'
+        'admin.profile_update',
+        'googledrive.get'
     ],
 
     // list role
@@ -24,7 +25,7 @@ return [
         ],
         'company' => [
             'route'=> 'customer.index',
-            'role_slug'=> 'customer',
+            'role_slug'=> 'company',
             'type'=> 'company'
         ]
     ],
