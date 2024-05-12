@@ -29,6 +29,7 @@
                   <thead>
                     <tr>
                       <th>No</th>
+                      <th>Company</th>
                       <th>Customer Name</th>
                       <th>Path</th>
                       <th>Created At</th>
@@ -41,6 +42,7 @@
                   <tfoot>
                     <tr>
                       <th>No</th>
+                      <th>Company</th>
                       <th>Customer Name</th>
                       <th>Path</th>
                       <th>Created At</th>
@@ -93,12 +95,18 @@
 @section('script')
 	@parent
     <script>
+      const COMPANY = "{{loggedInUser('company')}}"
       $(document).ready(function(){		  	
+        let columnDefs = [
+          {responsivePriority: 1, targets: -1}
+        ]
+
+        if(COMPANY){
+          columnDefs.push({targets: 1, visible: false})
+        }
         var settings = {
           responsive: true,
-          columnDefs: [
-            {responsivePriority: 1, targets: -1}
-          ],
+          columnDefs: columnDefs,
           destroy: true,
           scrollCollapse: true,
           autoWidth: false,
@@ -113,6 +121,7 @@
               var json = meta.settings.json;
               return (json.old_start + meta.row + 1);
             }},
+            { data:'company'},
             { data:'customers.name'},
             { data:'path'},
             { data:'created_at'},

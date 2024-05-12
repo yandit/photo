@@ -5,6 +5,7 @@ namespace Modules\GoogleDriveMedia\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\UserManagement\Entities\User;
+use Modules\Company\Entities\Company;
 
 class Disk extends Model
 {
@@ -26,5 +27,9 @@ class Disk extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 }

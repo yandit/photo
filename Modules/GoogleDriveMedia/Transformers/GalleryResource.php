@@ -16,6 +16,7 @@ class GalleryResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'company' => @$this->customer->company->name,
             'customers' => $this->customer,
             'path' => $this->path,
             'created_at' => $this->created_at->format('d-m-Y H:i:s'),

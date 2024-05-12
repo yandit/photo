@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\UserManagement\Entities\User;
 use Modules\GoogleDriveMedia\Entities\Credential;
+use Modules\Company\Entities\Company;
 
 class Customer extends Model
 {
@@ -29,6 +30,11 @@ class Customer extends Model
     public function credential()
     {
         return $this->hasOne(Credential::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
     
 }

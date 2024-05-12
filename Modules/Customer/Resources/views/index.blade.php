@@ -30,6 +30,7 @@
                   <thead>
                     <tr>
                       <th>No</th>
+                      <th>Company</th>
                       <th>Name</th>
                       <th>Status</th>
                       <th>Created At</th>
@@ -42,6 +43,7 @@
                   <tfoot>
                     <tr>
                       <th>No</th>
+                      <th>Company</th>
                       <th>Name</th>
                       <th>Status</th>
                       <th>Created At</th>
@@ -106,13 +108,18 @@
 @section('script')
 	@parent
     <script>
+      const COMPANY = "{{loggedInUser('company')}}"
       $(document).ready(function(){		  	
-        console.log(ADMIN_URL)
+        let columnDefs = [
+          {responsivePriority: 1, targets: -1}
+        ]
+
+        if(COMPANY){
+          columnDefs.push({targets: 1, visible: false})
+        }
         var settings = {
           responsive: true,
-          columnDefs: [
-            {responsivePriority: 1, targets: -1}
-          ],
+          columnDefs: columnDefs,
           destroy: true,
           scrollCollapse: true,
           autoWidth: false,
@@ -127,6 +134,7 @@
               var json = meta.settings.json;
               return (json.old_start + meta.row + 1);
             }},
+            { data:'company'},
             { data:'name'},
             { data:'status', render:function(data, type, row, meta){
               return data.toUpperCase();

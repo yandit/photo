@@ -16,6 +16,8 @@ class DiskResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'type' => $this->type,
+            'company'=> @$this->company->name,
             'client_id' => $this->client_id,
             'client_secret' => $this->client_secret,
             'refresh_token' => $this->refresh_token,
