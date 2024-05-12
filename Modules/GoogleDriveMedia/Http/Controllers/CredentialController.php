@@ -121,6 +121,12 @@ class CredentialController extends Controller
      */
     public function edit(Customer $customer)
     {
+        $company = loggedInUser('company');
+        if($company){
+            if($customer->company_id != $company->id){
+                abort(403, 'Forbidden');
+            }
+        }
         $credential = Credential::where('customer_id', $customer->id)->first();
         $company = loggedInUser('company');
         $disks = Disk::all();
@@ -138,6 +144,12 @@ class CredentialController extends Controller
      */
     public function update(CredentialRequest $request, Customer $customer)
     {
+        $company = loggedInUser('company');
+        if($company){
+            if($customer->company_id != $company->id){
+                abort(403, 'Forbidden');
+            }
+        }
         DB::beginTransaction();
         try {
             $post = $request->all();

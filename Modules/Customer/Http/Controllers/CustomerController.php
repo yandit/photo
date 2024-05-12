@@ -131,6 +131,13 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
+        $company = loggedInUser('company');
+        if($company){
+            if($customer->company_id != $company->id){
+                abort(403, 'Forbidden');
+            }
+        }
+
         $companies = Company::all();
         return view('customer::edit', compact('customer', 'companies'));
     }
@@ -143,6 +150,13 @@ class CustomerController extends Controller
      */
     public function update(Customer $customer, CustomerRequest $request)
     {
+        $company = loggedInUser('company');
+        if($company){
+            if($customer->company_id != $company->id){
+                abort(403, 'Forbidden');
+            }
+        }
+        
         $post = $request->all();
         $customer->name = $post['name'];
         $customer->slug = $post['slug'];
@@ -165,6 +179,12 @@ class CustomerController extends Controller
     {
         $success = true;
         try {
+            $company = loggedInUser('company');
+            if($company){
+                if($customer->company_id != $company->id){
+                    throw new \Exception('Forbidden');
+                }
+            }
             $customer->delete();
         } catch (\Exception $e) {
             $success = false;

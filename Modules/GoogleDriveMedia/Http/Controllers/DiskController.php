@@ -133,6 +133,12 @@ class DiskController extends Controller
      */
     public function edit(Disk $disk)
     {
+        $company = loggedInUser('company');
+        if($company){
+            if($disk->company_id != $company->id){
+                abort(403, 'Forbidden');
+            }
+        }
         $companies = Company::all();
         return view('googledrivemedia::disk.edit', compact('disk', 'companies'));
     }
@@ -145,6 +151,13 @@ class DiskController extends Controller
      */
     public function update(DiskRequest $request, Disk $disk)
     {
+        $company = loggedInUser('company');
+        if($company){
+            if($disk->company_id != $company->id){
+                abort(403, 'Forbidden');
+            }
+        }
+        
         $post = $request->all();
         $disk->disk_name = $post['disk_name'];
         $disk->email = $post['email'];
@@ -172,6 +185,12 @@ class DiskController extends Controller
     {
         $success = true;
         try {
+            $company = loggedInUser('company');
+            if($company){
+                if($disk->company_id != $company->id){
+                    throw new \Exception('Forbidden');
+                }
+            }
             $disk->delete();
         } catch (\Exception $e) {
             $success = false;

@@ -131,6 +131,12 @@ class GalleryController extends Controller
      */
     public function edit(Credential $credential)
     {
+        $company = loggedInUser('company');
+        if($company){
+            if($credential->customer->company_id != $company->id){
+                abort(403, 'Forbidden');
+            }
+        }
         $all_files = [];
         foreach ($credential->credential_details as $key => $detail) {
             $files = \Storage::disk($detail->disk->disk_name)->listContents($credential->path, false);
