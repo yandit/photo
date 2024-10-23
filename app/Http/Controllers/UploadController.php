@@ -270,6 +270,13 @@ class UploadController extends Controller
             $cwidth = $request->input('cwidth');
             $cheight = $request->input('cheight');
 
+            // forget image cache
+            $filePath = $upload->image;
+            $cacheKey = md5($filePath);
+            if(cache()->has($cacheKey)){
+                cache()->forget($cacheKey);
+            }
+
             $upload->update([
                 'x'=> $x,
                 'y'=> $y,
@@ -338,6 +345,12 @@ class UploadController extends Controller
             $upload->delete();
             if (\Storage::exists($filePath)) {
                 \Storage::delete($filePath);
+            }
+
+            // forget image cache
+            $cacheKey = md5($filePath);
+            if(cache()->has($cacheKey)){
+                cache()->forget($cacheKey);
             }
 
         } catch (\Exception $e) {

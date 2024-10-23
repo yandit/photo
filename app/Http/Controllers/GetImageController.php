@@ -12,16 +12,31 @@ class GetImageController extends Controller
         $x = $x == 'null' ? null : (int)$x;
         $y = $y == 'null' ? null : (int)$y;
 
-        $img = Image::cache(function($image) use($x, $y, $w, $h, $path, $source, $disk) {
-            $path = $this->handlePath($source, $path, $disk);
+        // $img = Image::cache(function($image) use($x, $y, $w, $h, $path, $source, $disk) {
+        //     $path = $this->handlePath($source, $path, $disk);
             
-            $image->make($path)
+        //     $image->make($path)
+        //         ->orientate()
+        //         ->crop((int)$w, (int)$h, $x, $y)
+        //         ->resize(472, 472)
+        //         ->encode('jpg',60);
+        // }, 1000, true);
+        // dd($path);
+
+        $cacheKey = md5($path);
+        // dd(cache()->get($cacheKey));
+        if(!cache()->has($cacheKey)){
+            $path = $this->handlePath($source, $path, $disk);
+            $img = Image::make($path)
                 ->orientate()
                 ->crop((int)$w, (int)$h, $x, $y)
                 ->resize(472, 472)
-                ->encode('jpg',60);
-        }, 1000, true);
-
+                ->encode('jpg', 60);
+            cache()->put($cacheKey, (string) $img->encoded, 1000);
+        }else{
+            $img = Image::make(cache()->get($cacheKey));
+        }
+        
         return $img->response();
     }
 
